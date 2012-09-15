@@ -12,6 +12,12 @@ var content = {
   'math_race_video':'<div><img src="images/math_race_video01.png"></div>'
 };
 
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+    });
+}
+
 $(document).ready(function() {
 
   var min_window_width = 800;
@@ -50,6 +56,20 @@ $(document).ready(function() {
 
   $('a.extra_content').first().mouseover();
   github_service.getGitHubProjects('iloire', '#ghcontainer');
+
+  preload([
+      'images/zaragoza_spain.png',
+      'images/express_js.png',
+      'images/math_race01.png',
+      'images/fatri_01.png',
+      'images/2earth_01.png',
+      'images/node_01.png',
+      'images/watchmen_01.png',
+      'images/codemotion_node_01.png',
+      'images/directorio_cachirulo02.png',
+      'images/mvc2invoice_01.png',
+      'images/math_race_video01.png'
+  ]);
 });
 
 var github_service = {
