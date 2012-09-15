@@ -1,0 +1,5 @@
+@media (max-width: 767px){
+	[class*="span"], .row-fluid [class*="span"] {
+		text-align:center;
+	}
+}
