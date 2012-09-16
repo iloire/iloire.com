@@ -1,7 +1,7 @@
 var content = {
   'map' : '<div><img src="images/zaragoza_spain.png"></div>',
   'express' : '<div><img src="images/express_js.png"></div>',
-  'math_race' : '<div><img src="images/math_race01.png"></div>',
+  'math_race' : '<div><img src="images/math_race02.png"></div>',
   'fatri' : '<div><img src="images/fatri_01.png"></div>',
   '2earth' : '<div><img src="images/2earth_01.png"></div>',
   'node' : '<div><img src="images/node_01.png"></div>',
@@ -9,7 +9,9 @@ var content = {
   'codemotion_node': '<div><img src="images/codemotion_node_01.png"></div>',
   'directorio_cachirulo': '<div><img src="images/directorio_cachirulo02.png"></div>',
   'mvc3invoice':'<div><img src="images/mvc2invoice_01.png"></div>',
-  'math_race_video':'<div><img src="images/math_race_video01.png"></div>'
+  'math_race_video':'<div><img src="images/math_race_video01.png"></div>',
+  'letsnode':'<div><img src="images/letsnode01.png"></div>',
+  'real_time_apps_slides':'<div><img src="images/real_time_apps_slides01.png"></div>'
 };
 
 function preload(arrayOfImages) {
