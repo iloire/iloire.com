@@ -22,56 +22,70 @@ function preload(arrayOfImages) {
 
 $(document).ready(function() {
 
-  var min_window_width = 800;
+  var min_window_width = 767; //extra content will be shown for bigger sizes
   var left_margin_extra_content = 600;
   var timeout_fade = null;
-  var offset_top = -20;
+  var offset_top = 20;
+
+  var element_extra_content = $('#extrainfo'); //cache element
+
+  function set_extra_content(element){
+    var windowWidth = $(window).width();
+    if (element && (windowWidth > min_window_width)){
+      var id = $(element).attr('data-contentid');
+      var top = $(window).scrollTop() + offset_top;
+      $(element_extra_content).css({top: top, left: left_margin_extra_content,
+          position: 'absolute' }).html(content[id]).fadeIn();
+      $(element).addClass('active');
+    }
+    else{
+      $(element_extra_content).hide();
+    }
+  }
 
   $(window).resize(function(){
-    var windowWidth = $(window).width();
-    var max_width_images = windowWidth - left_margin_extra_content - 100;
-    $('#extrainfo img').css({'max-width': max_width_images + 'px'});
+    set_extra_content();
   });
 
   $('a.extra_content').mouseover(function(ev){
     clearTimeout(timeout_fade);
-
-    var windowWidth = $(window).width();
-    var max_width_images = windowWidth - left_margin_extra_content - 100;
-    var id = $(this).attr('data-contentid');
-    if (windowWidth > min_window_width){
-      var top = ($(this).offset().top > 200) ? ($(this).offset().top - 190) : $(this).offset().top + offset_top;
-      $('#extrainfo').css({top: top, left: left_margin_extra_content,
-          position: 'absolute' }).html(content[id]).fadeIn();
-      $('#extrainfo img').css({'max-width': max_width_images + 'px'});
-
-      $(this).addClass('active');
-    }
+    set_extra_content(this);
   });
 
   $('a.extra_content').mouseout(function(ev){
     $(this).removeClass('active');
     timeout_fade = setTimeout(function(){
-      $('#extrainfo').html('').fadeOut('800');
+      $(element_extra_content).fadeOut('800');
     }, 1000);
   });
 
-  $('a.extra_content').first().mouseover();
+  $('a.extra_content').first().mouseover(); //show initial element
+
+  /*
+  $('#twitter_update_list a').on('mouseover', function(){
+    var url = "http://twitter.com/status/user_timeline/adamloving.json?count=10&callback=?";
+    $.getJSON( url, function( data ){ console.log(data) });
+  });
+  */
+
   github_service.getGitHubProjects('iloire', '#ghcontainer');
 
-  preload([
-      'images/zaragoza_spain.png',
-      'images/express_js.png',
-      'images/math_race01.png',
-      'images/fatri_01.png',
-      'images/2earth_01.png',
-      'images/node_01.png',
-      'images/watchmen_01.png',
-      'images/codemotion_node_01.png',
-      'images/directorio_cachirulo02.png',
-      'images/mvc2invoice_01.png',
-      'images/math_race_video01.png'
-  ]);
+  if ($(window).width()>min_window_width){
+    //preload if we show extra content
+    preload([
+        'images/zaragoza_spain.png',
+        'images/express_js.png',
+        'images/math_race01.png',
+        'images/fatri_01.png',
+        'images/2earth_01.png',
+        'images/node_01.png',
+        'images/watchmen_01.png',
+        'images/codemotion_node_01.png',
+        'images/directorio_cachirulo02.png',
+        'images/mvc2invoice_01.png',
+        'images/math_race_video01.png'
+    ]);
+  }
 });
 
 var github_service = {

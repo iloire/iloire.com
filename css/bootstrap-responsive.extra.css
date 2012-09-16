@@ -2,4 +2,30 @@
 	[class*="span"], .row-fluid [class*="span"] {
 		text-align:center;
 	}
+
+	body {
+		max-width:none !important;
+		padding:0.5em 1em !important;
+	}
+
+	header h1 {
+		font-size:3.4em !important;
+	}
+
+	header h1 span {
+		display:block;
+		font-size:0.6em !important;
+	}
+
+	header h1 span:before{
+		content: '' !important;
+	}
+
+	#section_author img{
+		max-width: 280px !important;
+	}
+
+	#section_photo img{
+		width:100%;
+	}
 }
