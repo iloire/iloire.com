@@ -28,56 +28,100 @@ app.settings = {
   offset_top : 20
 };
 
+app.github_service = {
+  getGitHubProjects : function (user, where){
+
+    if(typeof(Storage)!=="undefined"){
+      if (localStorage.ghprojects){ //get from localStorage
+        $(where).html(localStorage.ghprojects);
+        return;
+      }
+    }
+
+    $(where).html('loading...');
+    $.getJSON('https://api.github.com/users/' + user + '/repos?callback=?', function(data){
+
+      //sort by watchers desc
+      data.data.sort(function sorter(a,b) { return b.watchers - a.watchers; });
+
+      var output = '';
+      if (data.data.length){
+        output="<ul>";
+        for (var i=0, c=0 ;(c<5 && i<data.data.length);i++){
+          var project = data.data[i];
+          if (!project.fork){ //show only own projects
+            output = output + '<li><span class="label label-warning"><a title="watchers" target=_blank href="'+
+              project.html_url + '/watchers">' + project.watchers + '</a></span>' +
+              ' / <span class="label label-info"><a title="forks" target=_blank href="' + project.html_url +
+              '/network">' + project.forks + '</a></span>' + ' - <a target=_blank href="' +
+              project.html_url + '">' + project.name + '</a>: ' + project.description + '</li>';
+            c++;
+          }
+        }
+        output = output + "</ul>";
+      }
+      else{
+        output = '<p>No projects to show.</p>';
+      }
+
+      $(where).html(output);
+
+      if(typeof(Storage)!=="undefined"){ //cache in localStorage
+        localStorage.ghprojects = output;
+      }
+    });
+  }
+};
+
+app.set_extra_content = function(extra_content, caller_element){
+  var windowWidth = $(window).width();
+
+  if (windowWidth > app.settings.min_window_width){ //apply extra content
+
+    var top = $(window).scrollTop() + app.settings.offset_top;
+
+    if (caller_element){
+      var id = $(caller_element).attr('data-contentid');
+      $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
+        position: 'absolute' }).html(app.content[id]).fadeIn();
+
+      $(caller_element).addClass('active');
+    }
+
+    //resize images
+    var max_width_images = windowWidth - app.settings.left_margin_extra_content - 40;
+    $('img', extra_content).css({'max-width': max_width_images + 'px'});
+
+  }
+  else{
+    $(extra_content).hide();
+  }
+};
+
 $(document).ready(function() {
 
   var extra_content = $('#extrainfo'); //cache element
 
-  function set_extra_content(element){
-    var windowWidth = $(window).width();
-    if (element && (windowWidth > app.settings.min_window_width)){
-      var id = $(element).attr('data-contentid');
-      var top = $(window).scrollTop() + app.settings.offset_top;
-
-      var max_width_images = windowWidth - app.settings.left_margin_extra_content - 40;
-
-      $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
-          position: 'absolute' }).html(app.content[id]).fadeIn();
-
-      $('img', extra_content).css({'max-width': max_width_images + 'px'});
-
-      $(element).addClass('active');
-    }
-    else{
-      $(extra_content).hide();
-    }
-  }
-
   $(window).resize(function(){
-    set_extra_content();
+    app.set_extra_content(extra_content);
   });
 
   $('a.extra_content').mouseover(function(ev){
     clearTimeout(app.timeout_fade);
-    set_extra_content(this);
+    app.set_extra_content(extra_content, this);
   });
 
   $('a.extra_content').mouseout(function(ev){
     $(this).removeClass('active');
     app.timeout_fade = setTimeout(function(){
-      $(element_extra_content).fadeOut('800');
+      $(extra_content).fadeOut('800');
     }, 1000);
   });
 
   $('a.extra_content').first().mouseover(); //show initial element
 
-  /*
-  $('#twitter_update_list a').on('mouseover', function(){
-    var url = "http://twitter.com/status/user_timeline/adamloving.json?count=10&callback=?";
-    $.getJSON( url, function( data ){ console.log(data) });
-  });
-  */
-
-  github_service.getGitHubProjects('iloire', '#ghcontainer');
+  //load github projects
+  app.github_service.getGitHubProjects('iloire', '#ghcontainer');
 
   if ($(window).width()>app.settings.min_window_width){
     //preload if we show extra content
@@ -96,44 +140,3 @@ $(document).ready(function() {
     ]);
   }
 });
-
-var github_service = {
-
-  getGitHubProjects : function (user, where){
-    var cachekey = 'github ' + user;
-    if ($('body').data(cachekey)) { //save in dom via data() jquery attribute
-      $(where).html($('body').data(cachekey));
-    }
-    else{
-      $(where).html('loading');
-      $.getJSON('https://api.github.com/users/' + user + '/repos?callback=?', function(data){
-        var own_projects = [];
-        for(var i=0;i<data.data.length;i++){
-          if (!data.data[i].fork)
-            own_projects.push (data.data[i]);
-        }
-
-        //sort
-        function sorter(a,b) { return b.watchers - a.watchers; }
-
-        own_projects.sort(sorter);
-
-        var output = '';
-        if (own_projects.length){
-          output="<ul>";
-          for (var i=0, c=0 ;(c<5 && i<own_projects.length);i++){
-              output = output + '<li><span class="label label-warning"><a title="watchers" target=_blank href="'+ own_projects[i].html_url + '/watchers">' + own_projects[i].watchers + '</a></span>' + ' / <span class="label label-info"><a title="forks" target=_blank href="'+ own_projects[i].html_url + '/network">' + own_projects[i].forks + '</a></span>' + ' - <a target=_blank href="'+ own_projects[i].html_url + '">' + own_projects[i].name + '</a>: ' + own_projects[i].description + '</li>'; //todo
-              c++;
-          }
-          output = output + "</ul>";
-        }
-        else{
-          output = '<p>No projects to show.</p>';
-        }
-
-        $(where).html(output);
-        $('body').data(cachekey, output);
-      });
-    }
-  }
-};
