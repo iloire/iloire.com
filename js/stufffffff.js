@@ -35,7 +35,7 @@ app.settings = {
 //------------------------------------
 app.cache_service = {
   get : function (key) {
-    //localStorage.removeItem(key);
+    localStorage.removeItem(key);
     if(typeof(Storage)!=="undefined"){
       if (localStorage.getItem(key)){ //get from HTML5 localStorage
         if (localStorage.getItem(key).expires < +new Date()){
@@ -105,7 +105,7 @@ app.github_service = {
 app.twitter_service = {
 
   // from http://twitter.com/javascripts/blogger.js
-  getTimeline: function (user, where, count, title){
+  getTimeline: function (user, where, count, title, hide_replies){
     var self = this;
 
     var cache = app.cache_service.get('twitter-feed' + user);
@@ -115,7 +115,9 @@ app.twitter_service = {
     }
 
     $(where).html('loading...');
-    $.getJSON('http://twitter.com/statuses/user_timeline/'+ user + '.json?callback=?&count=' + count, function(data){
+    $.getJSON('http://twitter.com/statuses/user_timeline/'+ user + '.json?callback=?&count=' + count, function(data, status){
+
+      //todo: handle protected timeline errors (401)
       var statusHTML = [];
       for (var i=0; i<data.length; i++){
         var username = data[i].user.screen_name;

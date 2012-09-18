@@ -1,8 +1,11 @@
 /* general */
 body {
 	padding:1em 2em;
-	max-width: 550px;
 	background-image: url('../images/grey.png');
+}
+
+.wrapper{
+	max-width: 550px;
 }
 
 header{
