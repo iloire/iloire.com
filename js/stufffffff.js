@@ -35,7 +35,6 @@ app.settings = {
 //------------------------------------
 app.cache_service = {
   get : function (key) {
-    localStorage.removeItem(key);
     if(typeof(Storage)!=="undefined"){
       if (localStorage.getItem(key)){ //get from HTML5 localStorage
         if (localStorage.getItem(key).expires < +new Date()){
