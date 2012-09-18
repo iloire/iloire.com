@@ -17,25 +17,54 @@ app.content = {
 };
 
 app.preload = function (arrayOfImages) {
-    $(arrayOfImages).each(function(){
-        $('<img/>')[0].src = this;
-    });
+  $(arrayOfImages).each(function(){
+    $('<img/>')[0].src = this;
+  });
 };
 
 app.settings = {
   min_window_width : 767, //extra content will be shown for bigger sizes
   left_margin_extra_content : 600,
-  offset_top : 20
+  offset_top : 20,
+  max_author_twitter_count : 7,
+  max_twitter_count_detail : 10
 };
 
-app.github_service = {
-  getGitHubProjects : function (user, where){
-
+//------------------------------------
+// Throttle api calls by caching them
+//------------------------------------
+app.cache_service = {
+  get : function (key) {
+    //localStorage.removeItem(key);
     if(typeof(Storage)!=="undefined"){
-      if (localStorage.ghprojects){ //get from localStorage
-        $(where).html(localStorage.ghprojects);
-        return;
+      if (localStorage.getItem(key)){ //get from HTML5 localStorage
+        if (localStorage.getItem(key).expires < +new Date()){
+          localStorage.removeItem(key);
+        }
+        else{
+          return JSON.parse(localStorage.getItem(key)).data;
+        }
       }
+    }
+    return null;
+  },
+  set : function (key, obj, expiration_seconds){
+    if(typeof(Storage)!=="undefined"){
+      localStorage.setItem(key, JSON.stringify({data: obj, expires: +new Date() + expiration_seconds * 1000}));
+    }
+  }
+},
+
+//------------------------------------
+// Github service. Fetch gh project feed
+//------------------------------------
+app.github_service = {
+
+  getGitHubProjects : function (user, where){
+    var cache = app.cache_service.get('gh-feed');
+    if (cache){
+      $(where).html(cache);
+      return;
     }
 
     $(where).html('loading...');
@@ -65,11 +94,71 @@ app.github_service = {
       }
 
       $(where).html(output);
-
-      if(typeof(Storage)!=="undefined"){ //cache in localStorage
-        localStorage.ghprojects = output;
-      }
+      app.cache_service.set('gh-feed', output, 60 * 60 * 12);
     });
+  }
+};
+
+//------------------------------------
+// Twitter API. Get user timeline (anonymous)
+//------------------------------------
+app.twitter_service = {
+
+  // from http://twitter.com/javascripts/blogger.js
+  getTimeline: function (user, where, count, title){
+    var self = this;
+
+    var cache = app.cache_service.get('twitter-feed' + user);
+    if (cache){
+      $(where).html(cache);
+      return;
+    }
+
+    $(where).html('loading...');
+    $.getJSON('http://twitter.com/statuses/user_timeline/'+ user + '.json?callback=?&count=' + count, function(data){
+      var statusHTML = [];
+      for (var i=0; i<data.length; i++){
+        var username = data[i].user.screen_name;
+        var status = data[i].text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+          return '<a href="'+url+'">'+url+'</a>';
+        }).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+          return  reply.charAt(0)+'<a class="author" target="_blank" href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+        });
+        statusHTML.push('<li><span>'+status+'</span> <a target="_blank" style="font-size:85%" href="http://twitter.com/'+username+'/statuses/'+data[i].id_str+'">'+
+            self.relative_time(data[i].created_at)+'</a></li>');
+      }
+      var content = '<ul>' + statusHTML.join('') + '</ul>';
+      if (title){
+        content = title + content;
+      }
+      $(where).html(content).fadeIn();
+      app.cache_service.set('twitter-feed' + user, content, 60 * 10); //10 minutes
+    });
+  },
+
+  relative_time : function(time_value) {
+    var values = time_value.split(" ");
+    time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
+    var parsed_date = Date.parse(time_value);
+    var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+    var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+    delta = delta + (relative_to.getTimezoneOffset() * 60);
+
+    if (delta < 60) {
+      return 'less than a minute ago';
+    } else if(delta < 120) {
+      return 'about a minute ago';
+    } else if(delta < (60*60)) {
+      return (parseInt(delta / 60)).toString() + ' minutes ago';
+    } else if(delta < (120*60)) {
+      return 'about an hour ago';
+    } else if(delta < (24*60*60)) {
+      return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+    } else if(delta < (48*60*60)) {
+      return '1 day ago';
+    } else {
+      return (parseInt(delta / 86400)).toString() + ' days ago';
+    }
   }
 };
 
@@ -78,26 +167,31 @@ app.set_extra_content = function(extra_content, caller_element){
 
   if (windowWidth > app.settings.min_window_width){ //apply extra content
 
-    var top = $(window).scrollTop() + app.settings.offset_top;
-
     if (caller_element){
       var id = $(caller_element).attr('data-contentid');
-      $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
-        position: 'absolute' }).html(app.content[id]).fadeIn();
 
+      $(extra_content).html(app.content[id]);
       $(caller_element).addClass('active');
     }
 
-    //resize images
-    var max_width_images = windowWidth - app.settings.left_margin_extra_content - 40;
-    $('img', extra_content).css({'max-width': max_width_images + 'px'});
+    //set size acording to current window size
+    var top = $(window).scrollTop() + app.settings.offset_top;
+    var max_width_extra_content = windowWidth - app.settings.left_margin_extra_content - 40;
 
+    $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
+      position: 'absolute', 'width': max_width_extra_content + 'px'}).fadeIn();;
+
+    //resize images
+    $('img', extra_content).css({'max-width': max_width_extra_content + 'px'});
   }
   else{
     $(extra_content).hide();
   }
 };
 
+//------------------------------------------
+// Initialization  when DOM is ready
+//------------------------------------------
 $(document).ready(function() {
 
   var extra_content = $('#extrainfo'); //cache element
@@ -106,6 +200,7 @@ $(document).ready(function() {
     app.set_extra_content(extra_content);
   });
 
+  //bind static links to extra content
   $('a.extra_content').mouseover(function(ev){
     clearTimeout(app.timeout_fade);
     app.set_extra_content(extra_content, this);
@@ -114,14 +209,37 @@ $(document).ready(function() {
   $('a.extra_content').mouseout(function(ev){
     $(this).removeClass('active');
     app.timeout_fade = setTimeout(function(){
-      $(extra_content).fadeOut('800');
+      $(extra_content).fadeOut(800);
     }, 1000);
   });
 
-  $('a.extra_content').first().mouseover(); //show initial element
+  //bind dynamic content from tw timeline to extra content
+  $('#twitter_update_list').on('mouseover', 'a.author', function(){
+    clearTimeout(app.timeout_fade);
+    var top = $(window).scrollTop() + app.settings.offset_top;
+    $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
+      position: 'absolute' }).fadeIn();
+    app.twitter_service.getTimeline(this.text,'#extrainfo', app.settings.max_twitter_count_detail, '<h2>@'+ this.text +'\'s <small>latest tweets</small></h2>');
+  });
+
+  $('#twitter_update_list').on('mouseout', 'a', function(){
+    app.timeout_fade = setTimeout(function(){
+      $(extra_content).fadeOut(800);
+    }, 3000);
+  });
+
+  //show initial element
+  $('a.extra_content').first().mouseover();
+
+  $('#extrainfo').on('mouseover', function(){
+    clearTimeout(app.timeout_fade);
+  });
 
   //load github projects
   app.github_service.getGitHubProjects('iloire', '#ghcontainer');
+
+  //load twitter timeline
+  app.twitter_service.getTimeline('ivanloire','#twitter_update_list', app.settings.max_author_twitter_count);
 
   if ($(window).width()>app.settings.min_window_width){
     //preload if we show extra content

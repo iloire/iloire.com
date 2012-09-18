@@ -28,4 +28,8 @@
 	#section_photo img{
 		width:100%;
 	}
+
+	#twitter_update_list ul li{
+		font-size:1em !important;
+	}
 }
