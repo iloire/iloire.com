@@ -208,6 +208,7 @@ $(document).ready(function() {
 
   $('a.extra_content').mouseout(function(ev){
     $(this).removeClass('active');
+    clearTimeout(app.timeout_fade);
     app.timeout_fade = setTimeout(function(){
       $(extra_content).fadeOut(800);
     }, 1000);
@@ -223,6 +224,7 @@ $(document).ready(function() {
   });
 
   $('#twitter_update_list').on('mouseout', 'a', function(){
+    clearTimeout(app.timeout_fade);
     app.timeout_fade = setTimeout(function(){
       $(extra_content).fadeOut(800);
     }, 3000);
