@@ -1,19 +1,20 @@
 var app = {};
 
 app.content = {
-  'map' : '<div><img src="images/zaragoza_spain.png"></div>',
+  'map' : '<div><img src="images/zaragoza_spain.png"><span>Zaragoza (Spain)</span></div>',
   'express' : '<div><img src="images/express_js.png"></div>',
   'math_race' : '<div><img src="images/math_race02.png"></div>',
   'fatri' : '<div><img src="images/fatri_01.png"></div>',
   '2earth' : '<div><img src="images/2earth_01.png"></div>',
-  'node' : '<div><img src="images/node_01.png"></div>',
+  'node' : '<div><img src="images/node_01.png"><span>Node.js is a high performance library to write async/non blocking code in the server using Javascript</span></div>',
   'watchmen' : '<div><img src="images/watchmen_01.png"></div>',
   'codemotion_node': '<div><img src="images/codemotion_node_01.png"></div>',
   'directorio_cachirulo': '<div><img src="images/directorio_cachirulo02.png"></div>',
   'mvc3invoice':'<div><img src="images/mvc2invoice_01.png"></div>',
   'math_race_video':'<div><img src="images/math_race_video01.png"></div>',
   'letsnode':'<div><img src="images/letsnode01.png"></div>',
-  'real_time_apps_slides':'<div><img src="images/real_time_apps_slides01.png"></div>'
+  'real_time_apps_slides':'<div><img src="images/real_time_apps_slides01.png"></div>',
+  'backbone_google_maps': '<div><img src="images/backbone_google_maps01.png"><span>Playing with Backbone.js and Google Maps..</span></div>'
 };
 
 app.preload = function (arrayOfImages) {
@@ -26,7 +27,7 @@ app.settings = {
   min_window_width : 767, //extra content will be shown for bigger sizes
   left_margin_extra_content : 600,
   offset_top : 20,
-  max_author_twitter_count : 7,
+  max_author_twitter_count : 5,
   max_twitter_count_detail : 10
 };
 
@@ -37,7 +38,7 @@ app.cache_service = {
   get : function (key) {
     if(typeof(Storage)!=="undefined"){
       if (localStorage.getItem(key)){ //get from HTML5 localStorage
-        if (localStorage.getItem(key).expires < +new Date()){
+        if (JSON.parse(localStorage.getItem(key)).expires < +new Date()){
           localStorage.removeItem(key);
         }
         else{
@@ -93,7 +94,7 @@ app.github_service = {
       }
 
       $(where).html(output);
-      app.cache_service.set('gh-feed', output, 60 * 60 * 12);
+      app.cache_service.set('gh-feed', output, 60 * 60 * 1);
     });
   }
 };
@@ -133,7 +134,7 @@ app.twitter_service = {
         content = title + content;
       }
       $(where).html(content).fadeIn();
-      app.cache_service.set('twitter-feed' + user, content, 60 * 10); //10 minutes
+      app.cache_service.set('twitter-feed' + user, content, 60 * 1); //minutes
     });
   },
 

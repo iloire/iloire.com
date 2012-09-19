@@ -1,7 +1,12 @@
 /* general */
 body {
 	padding:1em 2em;
-	background-image: url('../images/grey.png');
+	background-image: url('../images/backgrounds/bg_grey.png');
+	font-family: 'Ubuntu', sans-serif;
+}
+
+h1, h2{
+	font-family: 'Ubuntu', sans-serif;
 }
 
 .wrapper{
@@ -161,6 +166,14 @@ a.tag5{
 	border-color:#f5f5f5;
 	border-style:solid;
 	border-width:3px;
+}
+
+#extrainfo div {
+	text-align:center;
+}
+
+#extrainfo div span{
+	font-size:1.3em;
 }
 
 .label a {
