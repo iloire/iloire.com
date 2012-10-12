@@ -177,6 +177,7 @@ a.tag5{
 #extrainfo div span{
 	font-size:1.3em;
 	text-transform:lowercase;
+	display:block;
 }
 
 .label a {
