@@ -2,14 +2,14 @@ var app = {};
 
 app.content = {
   'map' : '<div><img src="images/zaragoza_spain.png"><span>Zaragoza (Spain)</span></div>',
+  'map_sydney' : '<div><img src="images/sydney_map.png"><span>Sydney (Australia)</span></div>',
   'express' : '<div><img src="images/express_js.png"></div>',
   'math_race' : '<div><img src="images/math_race02.png"></div>',
-  'fatri' : '<div><img src="images/fatri_01.png"></div>',
+  'fatri' : '<div><img src="images/fatri_01.png"><span>Triatlhon regional association. I created and support the website</span></div>',
   '2earth' : '<div><img src="images/2earth_01.png"></div>',
-  'node' : '<div><img src="images/node_01.png"><span>Node.js is a high performance library to write async/non blocking code in the server using Javascript</span></div>',
-  'watchmen' : '<div><img src="images/watchmen_01.png"></div>',
+  'watchmen' : '<div><img src="images/watchmen_01.png"><span>A node.js service monitor. Source code available on GitHub</span></div>',
   'codemotion_node': '<div><img src="images/codemotion_node_01.png"></div>',
-  'directorio_cachirulo': '<div><img src="images/directorio_cachirulo02.png"></div>',
+  'directorio_cachirulo': '<div><img src="images/directorio_cachirulo02.png"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
   'mvc3invoice':'<div><img src="images/mvc2invoice_01.png"></div>',
   'math_race_video':'<div><img src="images/math_race_video01.png"></div>',
   'letsnode':'<div><img src="images/letsnode01.png"></div>',
@@ -28,7 +28,8 @@ app.settings = {
   left_margin_extra_content : 600,
   offset_top : 20,
   max_author_twitter_count : 5,
-  max_twitter_count_detail : 10
+  max_twitter_count_detail : 10,
+  cache_duration_minutes: 10
 };
 
 //------------------------------------
@@ -94,7 +95,7 @@ app.github_service = {
       }
 
       $(where).html(output);
-      app.cache_service.set('gh-feed', output, 60 * 60 * 1);
+      app.cache_service.set('gh-feed', output, 60 * app.settings.cache_duration_minutes);
     });
   }
 };
@@ -115,7 +116,8 @@ app.twitter_service = {
     }
 
     $(where).html('loading...');
-    $.getJSON('http://twitter.com/statuses/user_timeline/'+ user + '.json?callback=?&count=' + count, function(data, status){
+    var url = "https://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + user + "&count=" + count + "&callback=?";
+    $.getJSON(url, function(data, status){
 
       //todo: handle protected timeline errors (401)
       var statusHTML = [];
@@ -134,7 +136,7 @@ app.twitter_service = {
         content = title + content;
       }
       $(where).html(content).fadeIn();
-      app.cache_service.set('twitter-feed' + user, content, 60 * 1); //minutes
+      app.cache_service.set('twitter-feed' + user, content, 60 * app.settings.cache_duration_minutes);
     });
   },
 
@@ -143,7 +145,7 @@ app.twitter_service = {
     time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
     var parsed_date = Date.parse(time_value);
     var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-    var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+    var delta = parseInt((relative_to.getTime() - parsed_date) / 1000, 10);
     delta = delta + (relative_to.getTimezoneOffset() * 60);
 
     if (delta < 60) {
@@ -151,15 +153,15 @@ app.twitter_service = {
     } else if(delta < 120) {
       return 'about a minute ago';
     } else if(delta < (60*60)) {
-      return (parseInt(delta / 60)).toString() + ' minutes ago';
+      return (parseInt(delta / 60, 10)).toString() + ' minutes ago';
     } else if(delta < (120*60)) {
       return 'about an hour ago';
     } else if(delta < (24*60*60)) {
-      return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+      return 'about ' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
     } else if(delta < (48*60*60)) {
       return '1 day ago';
     } else {
-      return (parseInt(delta / 86400)).toString() + ' days ago';
+      return (parseInt(delta / 86400, 10)).toString() + ' days ago';
     }
   }
 };
@@ -181,7 +183,7 @@ app.set_extra_content = function(extra_content, caller_element){
     var max_width_extra_content = windowWidth - app.settings.left_margin_extra_content - 40;
 
     $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
-      position: 'absolute', 'width': max_width_extra_content + 'px'}).fadeIn();;
+      position: 'absolute', 'width': max_width_extra_content + 'px'}).fadeIn();
 
     //resize images
     $('img', extra_content).css({'max-width': max_width_extra_content + 'px'});

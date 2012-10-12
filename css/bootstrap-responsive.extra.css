@@ -21,6 +21,10 @@
 		content: '' !important;
 	}
 
+	section h2 {
+		font-size:2em;
+	}
+
 	#section_author img{
 		max-width: 280px !important;
 	}

@@ -11,6 +11,7 @@ h1, h2{
 
 .wrapper{
 	max-width: 550px;
+	min-width: 380px;
 }
 
 header{
@@ -156,6 +157,7 @@ a.tag5{
 }
 
 #extrainfo ul {
+	margin:0;
 	list-style-type: none;
 	text-align:left;
 	padding:10px;
@@ -174,6 +176,7 @@ a.tag5{
 
 #extrainfo div span{
 	font-size:1.3em;
+	text-transform:lowercase;
 }
 
 .label a {
