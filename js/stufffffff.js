@@ -14,7 +14,8 @@ app.content = {
   'math_race_video':'<div><img src="images/math_race_video01.png"></div>',
   'letsnode':'<div><img src="images/letsnode01.png"></div>',
   'real_time_apps_slides':'<div><img src="images/real_time_apps_slides01.png"></div>',
-  'backbone_google_maps': '<div><img src="images/backbone_google_maps01.png"><span>Playing with Backbone.js and Google Maps..</span></div>'
+  'backbone_google_maps': '<div><img src="images/backbone_google_maps01.png"><span>Playing with Backbone.js and Google Maps..</span></div>',
+  'atlasboard':'<div><img src="images/atlasboard-01.png"></div>',
 };
 
 app.preload = function (arrayOfImages) {
