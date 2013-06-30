@@ -45,10 +45,6 @@ header h1 span:before
 	content: ": ";
 }
 
-section img{
-
-}
-
 #section_author img{
 	max-width: 120px;
 	margin-bottom: 20px;
@@ -59,7 +55,11 @@ section img{
 }
 
 #section_author .location{
+	color: gray;
+	font-size: 0.9em;
 	display:block;
+	margin-left: 0.5em;
+	margin-top: 0.3em;
 }
 
 .networks{
@@ -129,7 +129,7 @@ a.tag5{
 	border-width:1px;
 }
 
-#twitter_container{
+#me{
 	text-align:left;
 	padding:10px;
 	background-color:#fff;
@@ -140,24 +140,10 @@ a.tag5{
 	border-width:3px;
 }
 
-#twitter_container h3{
+#me h3{
 	font-size:0.9em;
 	line-height: 1.4em;
 	margin:0 0 10px 0;
-}
-
-#twitter_update_list ul{
-	margin:0;
-	list-style-type: none;
-}
-
-#twitter_update_list ul li{
-	line-height: 1.2em;
-	font-size:0.9em;
-	border-color:white;
-	border-style:solid;
-	border-width:0 0 2px 0;
-	margin:5px 0 2px 0;
 }
 
 #extrainfo ul {

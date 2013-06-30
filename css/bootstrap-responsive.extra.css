@@ -25,6 +25,10 @@
 		font-size:2em;
 	}
 
+	#section_author {
+		font-size: 1.3em;
+	}
+
 	#section_author img{
 		max-width: 280px !important;
 	}

@@ -28,8 +28,6 @@ app.settings = {
   min_window_width : 767, //extra content will be shown for bigger sizes
   left_margin_extra_content : 600,
   offset_top : 20,
-  max_author_twitter_count : 5,
-  max_twitter_count_detail : 10,
   cache_duration_minutes: 10
 };
 
@@ -101,72 +99,6 @@ app.github_service = {
   }
 };
 
-//------------------------------------
-// Twitter API. Get user timeline (anonymous)
-//------------------------------------
-app.twitter_service = {
-
-  // from http://twitter.com/javascripts/blogger.js
-  getTimeline: function (user, where, count, title, hide_replies){
-    var self = this;
-
-    var cache = app.cache_service.get('twitter-feed' + user);
-    if (cache){
-      $(where).html(cache);
-      return;
-    }
-
-    $(where).html('loading...');
-    var url = "https://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + user + "&count=" + count + "&callback=?";
-    $.getJSON(url, function(data, status){
-
-      //todo: handle protected timeline errors (401)
-      var statusHTML = [];
-      for (var i=0; i<data.length; i++){
-        var username = data[i].user.screen_name;
-        var status = data[i].text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
-          return '<a href="'+url+'">'+url+'</a>';
-        }).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
-          return  reply.charAt(0)+'<a class="author" target="_blank" href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
-        });
-        statusHTML.push('<li><span>'+status+'</span> <a target="_blank" style="font-size:85%" href="http://twitter.com/'+username+'/statuses/'+data[i].id_str+'">'+
-            self.relative_time(data[i].created_at)+'</a></li>');
-      }
-      var content = '<ul>' + statusHTML.join('') + '</ul>';
-      if (title){
-        content = title + content;
-      }
-      $(where).html(content).fadeIn();
-      app.cache_service.set('twitter-feed' + user, content, 60 * app.settings.cache_duration_minutes);
-    });
-  },
-
-  relative_time : function(time_value) {
-    var values = time_value.split(" ");
-    time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
-    var parsed_date = Date.parse(time_value);
-    var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-    var delta = parseInt((relative_to.getTime() - parsed_date) / 1000, 10);
-    delta = delta + (relative_to.getTimezoneOffset() * 60);
-
-    if (delta < 60) {
-      return 'less than a minute ago';
-    } else if(delta < 120) {
-      return 'about a minute ago';
-    } else if(delta < (60*60)) {
-      return (parseInt(delta / 60, 10)).toString() + ' minutes ago';
-    } else if(delta < (120*60)) {
-      return 'about an hour ago';
-    } else if(delta < (24*60*60)) {
-      return 'about ' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
-    } else if(delta < (48*60*60)) {
-      return '1 day ago';
-    } else {
-      return (parseInt(delta / 86400, 10)).toString() + ' days ago';
-    }
-  }
-};
-
 app.set_extra_content = function(extra_content, caller_element){
   var windowWidth = $(window).width();
 
@@ -219,22 +151,6 @@ $(document).ready(function() {
     }, 1000);
   });
 
-  //bind dynamic content from tw timeline to extra content
-  $('#twitter_update_list').on('mouseover', 'a.author', function(){
-    clearTimeout(app.timeout_fade);
-    var top = $(window).scrollTop() + app.settings.offset_top;
-    $(extra_content).css({top: top, left: app.settings.left_margin_extra_content,
-      position: 'absolute' }).fadeIn();
-    app.twitter_service.getTimeline(this.text,'#extrainfo', app.settings.max_twitter_count_detail, '<h2>@'+ this.text +'\'s <small>latest tweets</small></h2>');
-  });
-
-  $('#twitter_update_list').on('mouseout', 'a', function(){
-    clearTimeout(app.timeout_fade);
-    app.timeout_fade = setTimeout(function(){
-      $(extra_content).fadeOut(800);
-    }, 3000);
-  });
-
   //show initial element
   $('a.extra_content').first().mouseover();
 
@@ -244,9 +160,6 @@ $(document).ready(function() {
 
   //load github projects
   app.github_service.getGitHubProjects('iloire', '#ghcontainer');
-
-  //load twitter timeline
-  app.twitter_service.getTimeline('ivanloire','#twitter_update_list', app.settings.max_author_twitter_count);
 
   if ($(window).width()>app.settings.min_window_width){
     //preload if we show extra content
