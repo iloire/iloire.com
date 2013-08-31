@@ -27,7 +27,7 @@
   };
 
   var settings = {
-    min_window_width : 767, //extra content will be shown for bigger sizes
+    min_window_width : 900, //extra content will be shown for bigger sizes
     left_margin_extra_content : 600,
     offset_top : 20,
     cache_duration_minutes: 10
