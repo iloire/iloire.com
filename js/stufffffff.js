@@ -1,4 +1,4 @@
-(function(){
+(function($){
 
   var content = {
 
@@ -96,7 +96,7 @@
         }
 
         $(where).html(output);
-        app.cache_service.set('gh-feed', output, 60 * app.settings.cache_duration_minutes);
+        cache_service.set('gh-feed', output, 60 * settings.cache_duration_minutes);
       });
     }
   };
