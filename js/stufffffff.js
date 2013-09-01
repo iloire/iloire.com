@@ -127,6 +127,17 @@
       //resize images
       $('img', extra_content).css({'max-width': max_width_extra_content + 'px'});
     }
+    else {
+      if (extra_content.is(":visible")){
+        hide_extra_content();
+      }
+    }
+  }
+
+  function hide_extra_content () {
+    extra_content.fadeOut(800, function(){
+      extra_content.empty();
+    });
   }
 
   function show_extra_content (content) {
@@ -167,9 +178,7 @@
 
     $('a.extra_content').mouseout(function(ev){
       timeout_fade = setTimeout(function(){
-        extra_content.fadeOut(800, function(){
-          extra_content.empty();
-        });
+        hide_extra_content();
       }, 1500);
     });
 
