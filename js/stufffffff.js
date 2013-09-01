@@ -143,6 +143,10 @@
       move_and_resize_if_exists();
     });
 
+    $(window).scroll(function(){ // looks good with no throttling.
+      move_and_resize_if_exists();
+    });
+
     //bind static links to extra content
     $('a.extra_content').mouseover(function(ev){
       clearTimeout(timeout_fade);
