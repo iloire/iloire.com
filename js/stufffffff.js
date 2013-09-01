@@ -13,7 +13,6 @@
     'watchmen' : '<div><img class="dropshadow" src="images/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
     'codemotion_node': '<div><img class="dropshadow" src="images/building-with-node.jpg"></div>',
     'directorio_cachirulo': '<div><img class="dropshadow" src="images/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
-    'math_race_video':'<div><img src="images/math_race_video01.png"></div>',
     'letsnode':'<div><img class="dropshadow" src="images/letsnode.jpg"></div>',
     'backbone_google_maps': '<div><img class="dropshadow" src="images/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
     'atlasboard':'<div><img class="dropshadow" src="images/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
@@ -197,7 +196,7 @@
           'images/watchmen.jpg',
           'images/building-with-node.jpg',
           'images/directorio.jpg',
-          'images/math_race_video01.png'
+          'images/2earth_01.png'
       ]);
     }
   });
