@@ -127,8 +127,8 @@
     move_and_resize_if_exists();
   }
 
-  function track(action, label, val){
-    ga('send', 'action', 'general', action, label, val);
+  function track(cat, action, label, val){
+    ga('send', 'event', cat, action, label, val);
   }
 
   var extra_content = $('#extrainfo');
@@ -150,7 +150,7 @@
         extra_content.fadeIn();
         var id = $(this).attr('data-contentid');
         show_extra_content(content[id]);
-        track('mouseover', 'extra_content_show', id);
+        track('general', 'mouseover', 'extra_content_show', id);
       }
     });
 
