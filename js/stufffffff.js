@@ -127,7 +127,7 @@
     move_and_resize_if_exists();
   }
 
-  var extra_content = $('#extrainfo'); //cache element
+  var extra_content = $('#extrainfo');
   var timeout_fade = null;
 
   //------------------------------------------
@@ -167,8 +167,7 @@
     //load github projects
     github_service.getGitHubProjects('iloire', '#ghcontainer');
 
-    if ($(window).width() > settings.min_window_width){
-      //preload if we show extra content
+    if (size_compatible_with_extra_content()){
       preload([
           'images/zaragoza.jpg',
           'images/sydney.jpg',
