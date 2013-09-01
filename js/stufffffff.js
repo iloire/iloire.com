@@ -66,6 +66,7 @@
       var cache = cache_service.get('gh-feed');
       if (cache){
         $(where).html(cache);
+        track('general', 'cache-hit', 'gh-feed');
         return;
       }
 
