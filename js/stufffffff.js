@@ -107,11 +107,12 @@
   }
 
   function move_and_resize_if_exists(){
+    if (size_compatible_with_extra_content()){
       var windowWidth = $(window).width();
       var rightMargin = 50;
       var max_width_extra_content = windowWidth - settings.left_margin_extra_content - rightMargin;
 
-      $(extra_content).css({
+      extra_content.css({
         top: $(window).scrollTop() + settings.offset_top, 
         left: settings.left_margin_extra_content,
         position: 'absolute', 
@@ -120,10 +121,11 @@
 
       //resize images
       $('img', extra_content).css({'max-width': max_width_extra_content + 'px'});
+    }
   }
 
   function show_extra_content (content) {
-    $(extra_content).html(content);
+    extra_content.html(content);
     move_and_resize_if_exists();
   }
 
@@ -160,8 +162,8 @@
 
     $('a.extra_content').mouseout(function(ev){
       timeout_fade = setTimeout(function(){
-        $(extra_content).fadeOut(800, function(){
-          $(extra_content).empty();
+        extra_content.fadeOut(800, function(){
+          extra_content.empty();
         });
       }, 1500);
     });
