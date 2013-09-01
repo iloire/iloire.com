@@ -20,8 +20,13 @@
 
   };
 
+  function log(o){
+    console && console.log && console.log(o);
+  }
+
   var preload = function (arrayOfImages) {
     $(arrayOfImages).each(function(){
+      log('Preloading image ' + this + ' ...');
       $('<img/>')[0].src = this;
     });
   };
