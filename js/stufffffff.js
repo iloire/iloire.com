@@ -150,7 +150,7 @@
         extra_content.fadeIn();
         var id = $(this).attr('data-contentid');
         show_extra_content(content[id]);
-        track('general', 'mouseover', 'extra_content_show', id);
+        track('general', 'mouseover', id);
       }
     });
 
