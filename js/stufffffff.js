@@ -127,6 +127,10 @@
     move_and_resize_if_exists();
   }
 
+  function track(action, label, val){
+    ga('send', 'action', 'general', action, label, val);
+  }
+
   var extra_content = $('#extrainfo');
   var timeout_fade = null;
 
@@ -144,7 +148,9 @@
       clearTimeout(timeout_fade);
       if (size_compatible_with_extra_content()){
         extra_content.fadeIn();
-        show_extra_content(content[$(this).attr('data-contentid')]);
+        var id = $(this).attr('data-contentid');
+        show_extra_content(content[id]);
+        track('mouseover', 'extra_content_show', id);
       }
     });
 
