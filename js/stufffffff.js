@@ -209,6 +209,7 @@
           'images/shipit24.jpg',
           'images/linkedin.jpg',
           'images/bitbucket.jpg',
+          'images/github.jpg',
           'images/twitter.jpg',
           'images/zaragoza.jpg',
           'images/sydney.jpg',
