@@ -4,6 +4,15 @@
 
     'filosofia': '<div><img class="dropshadow" src="images/filosofia_big_by_javier_agustin_rounded.jpg"><span>:)</span></div>',
 
+    'atlassian' : '<div style="position:relative">' + 
+      '<img style="width:70%" class="dropshadow" src="images/atlassian.jpg">'+
+      '<img class="dropshadow" style="width:50%;position:relative;top:-180px;left:0px" src="images/workAtlassian.jpg">'+
+      '<img class="dropshadow" style="width:50%;position:relative;top:-220px;left:30px" src="images/shipit24.jpg">'+
+      '</div>',
+    'twitter' : '<div><img class="dropshadow" src="images/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
+    'linkedin' : '<div><img class="dropshadow" src="images/linkedin.jpg"><span>Linkedin</span></div>',
+    'bitbucket' : '<div><img class="dropshadow" src="images/bitbucket.jpg"><span>Bitbucket (@iloire)</span></div>',
+    'github' : '<div><img class="dropshadow" src="images/github.jpg"><span>Github (@loire)</span></div>',
     'map' : '<div><img class="dropshadow" src="images/zaragoza.jpg"><span>Zaragoza (Spain)</span></div>',
     'map_sydney' : '<div><img class="dropshadow" src="images/sydney.jpg"><span>Sydney (Australia)</span></div>',
     'express' : '<div><img src="images/express_js.png"></div>',
@@ -32,8 +41,8 @@
 
   var settings = {
     min_window_width : 900, //extra content will be shown for bigger sizes
-    left_margin_extra_content : 600,
-    offset_top : 20,
+    left_margin_extra_content : 610,
+    offset_top : 80,
     cache_duration_minutes: 10
   };
 
@@ -89,7 +98,7 @@
               output = output + '<li><span class="label label-warning"><a title="watchers" target=_blank href="'+
                 project.html_url + '/watchers">' + project.watchers + '</a></span>' +
                 ' / <span class="label label-info"><a title="forks" target=_blank href="' + project.html_url +
-                '/network">' + project.forks + '</a></span>' + ' - <a target=_blank href="' +
+                '/network">' + project.forks + '</a></span>' + '  <a target=_blank href="' +
                 project.html_url + '">' + project.name + '</a>: ' + project.description + '</li>';
               c++;
             }
@@ -195,6 +204,12 @@
 
     if (size_compatible_with_extra_content()){
       preload([
+          'images/workAtlassian.jpg',
+          'images/atlassian.jpg',
+          'images/shipit24.jpg',
+          'images/linkedin.jpg',
+          'images/bitbucket.jpg',
+          'images/twitter.jpg',
           'images/zaragoza.jpg',
           'images/sydney.jpg',
           'images/backbone-googlemaps.jpg',
