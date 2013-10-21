@@ -17,7 +17,7 @@
     'map_sydney' : '<div><img class="dropshadow" src="images/sydney.jpg"><span>Sydney (Australia)</span></div>',
     'express' : '<div><img src="images/express_js.png"></div>',
     'math_race' : '<div><img src="images/math_race02.png"></div>',
-    'fatri' : '<div><img class="dropshadow" src="images/triatlonaragon.jpg"><span>Triatlhon regional association. I created and support the website</span></div>',
+    'fatri' : '<div><img class="dropshadow" src="images/triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
     '2earth' : '<div><img src="images/2earth_01.png"></div>',
     'watchmen' : '<div><img class="dropshadow" src="images/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
     'codemotion_node': '<div><img class="dropshadow" src="images/building-with-node.jpg"></div>',
