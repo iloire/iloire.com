@@ -1,30 +1,31 @@
 (function($){
+  var cdn_img_prefix = 'http://d13ry56xmap4ax.cloudfront.net';
 
   var content = {
 
-    'filosofia': '<div><img class="dropshadow" src="images/filosofia_big_by_javier_agustin_rounded.jpg"><span>:)</span></div>',
+    'filosofia': '<div><img class="dropshadow" src="' + cdn_img_prefix + '/filosofia_big_by_javier_agustin_rounded.jpg"><span>:)</span></div>',
 
     'atlassian' : '<div style="position:relative">' + 
-      '<img style="width:70%" class="dropshadow" src="images/atlassian.jpg">'+
-      '<img class="dropshadow" style="width:50%;position:relative;top:-180px;left:0px" src="images/workAtlassian.jpg">'+
-      '<img class="dropshadow" style="width:50%;position:relative;top:-220px;left:30px" src="images/shipit24.jpg">'+
+      '<img style="width:70%" class="dropshadow" src="' + cdn_img_prefix + '/atlassian.jpg">'+
+      '<img class="dropshadow" style="width:50%;position:relative;top:-180px;left:0px" src="' + cdn_img_prefix + '/workAtlassian.jpg">'+
+      '<img class="dropshadow" style="width:50%;position:relative;top:-220px;left:30px" src="' + cdn_img_prefix + '/shipit24.jpg">'+
       '</div>',
-    'twitter' : '<div><img class="dropshadow" src="images/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
-    'linkedin' : '<div><img class="dropshadow" src="images/linkedin.jpg"><span>Linkedin</span></div>',
-    'bitbucket' : '<div><img class="dropshadow" src="images/bitbucket.jpg"><span>Bitbucket (@iloire)</span></div>',
-    'github' : '<div><img class="dropshadow" src="images/github.jpg"><span>Github (@loire)</span></div>',
-    'map' : '<div><img class="dropshadow" src="images/zaragoza.jpg"><span>Zaragoza (Spain)</span></div>',
-    'map_sydney' : '<div><img class="dropshadow" src="images/sydney.jpg"><span>Sydney (Australia)</span></div>',
-    'express' : '<div><img src="images/express_js.png"></div>',
-    'math_race' : '<div><img src="images/math_race02.png"></div>',
-    'fatri' : '<div><img class="dropshadow" src="images/triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
-    '2earth' : '<div><img src="images/2earth_01.png"></div>',
-    'watchmen' : '<div><img class="dropshadow" src="images/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
-    'codemotion_node': '<div><img class="dropshadow" src="images/building-with-node.jpg"></div>',
-    'directorio_cachirulo': '<div><img class="dropshadow" src="images/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
-    'letsnode':'<div><img class="dropshadow" src="images/letsnode.jpg"></div>',
-    'backbone_google_maps': '<div><img class="dropshadow" src="images/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
-    'atlasboard':'<div><img class="dropshadow" src="images/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
+    'twitter' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
+    'linkedin' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/linkedin.jpg"><span>Linkedin</span></div>',
+    'bitbucket' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/bitbucket.jpg"><span>Bitbucket (@iloire)</span></div>',
+    'github' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/github.jpg"><span>Github (@loire)</span></div>',
+    'map' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/zaragoza.jpg"><span>Zaragoza (Spain)</span></div>',
+    'map_sydney' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/sydney.jpg"><span>Sydney (Australia)</span></div>',
+    'express' : '<div><img src="' + cdn_img_prefix + '/express_js.png"></div>',
+    'math_race' : '<div><img src="' + cdn_img_prefix + '/math_race02.png"></div>',
+    'fatri' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
+    '2earth' : '<div><img src="' + cdn_img_prefix + '/2earth_01.png"></div>',
+    'watchmen' : '<div><img class="dropshadow" src="' + cdn_img_prefix + '/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
+    'codemotion_node': '<div><img class="dropshadow" src="' + cdn_img_prefix + '/building-with-node.jpg"></div>',
+    'directorio_cachirulo': '<div><img class="dropshadow" src="' + cdn_img_prefix + '/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
+    'letsnode':'<div><img class="dropshadow" src="' + cdn_img_prefix + '/letsnode.jpg"></div>',
+    'backbone_google_maps': '<div><img class="dropshadow" src="' + cdn_img_prefix + '/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
+    'atlasboard':'<div><img class="dropshadow" src="' + cdn_img_prefix + '/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
 
   };
 
@@ -204,24 +205,24 @@
 
     if (size_compatible_with_extra_content()){
       preload([
-          'images/workAtlassian.jpg',
-          'images/atlassian.jpg',
-          'images/shipit24.jpg',
-          'images/linkedin.jpg',
-          'images/bitbucket.jpg',
-          'images/github.jpg',
-          'images/twitter.jpg',
-          'images/zaragoza.jpg',
-          'images/sydney.jpg',
-          'images/backbone-googlemaps.jpg',
-          'images/letsnode.jpg',
-          'images/atlasboard-01.jpg',
-          'images/math_race01.png',
-          'images/triatlonaragon.jpg',
-          'images/watchmen.jpg',
-          'images/building-with-node.jpg',
-          'images/directorio.jpg',
-          'images/2earth_01.png'
+          cdn_img_prefix + '/workAtlassian.jpg',
+          cdn_img_prefix + '/atlassian.jpg',
+          cdn_img_prefix + '/shipit24.jpg',
+          cdn_img_prefix + '/linkedin.jpg',
+          cdn_img_prefix + '/bitbucket.jpg',
+          cdn_img_prefix + '/github.jpg',
+          cdn_img_prefix + '/twitter.jpg',
+          cdn_img_prefix + '/zaragoza.jpg',
+          cdn_img_prefix + '/sydney.jpg',
+          cdn_img_prefix + '/backbone-googlemaps.jpg',
+          cdn_img_prefix + '/letsnode.jpg',
+          cdn_img_prefix + '/atlasboard-01.jpg',
+          cdn_img_prefix + '/math_race01.png',
+          cdn_img_prefix + '/triatlonaragon.jpg',
+          cdn_img_prefix + '/watchmen.jpg',
+          cdn_img_prefix + '/building-with-node.jpg',
+          cdn_img_prefix + '/directorio.jpg',
+          cdn_img_prefix + '/2earth_01.png'
       ]);
     }
   });
