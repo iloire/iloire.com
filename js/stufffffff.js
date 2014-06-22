@@ -85,7 +85,7 @@
       }
 
       $(where).html('loading...');
-      $.getJSON('https://api.github.com/users/' + user + '/repos?callback=?', function(data){
+      $.getJSON('https://api.github.com/users/' + user + '/repos?per_page=50&callback=?', function(data){
 
         //sort by watchers desc
         data.data.sort(function sorter(a,b) { return b.watchers - a.watchers; });
