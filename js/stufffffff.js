@@ -1,4 +1,6 @@
 (function($){
+
+  var DEBUG = true;
   var cdn_img_prefix = 'http://d13ry56xmap4ax.cloudfront.net';
 
   var content = {
@@ -30,7 +32,8 @@
   };
 
   function log(o){
-    console && console.log && console.log(o);
+    if (DEBUG)
+      console.log(o);
   }
 
   var preload = function (arrayOfImages) {
@@ -41,6 +44,7 @@
   };
 
   var settings = {
+    max_gh_projects: 7,
     min_window_width : 900, //extra content will be shown for bigger sizes
     left_margin_extra_content : 610,
     offset_top : 80,
@@ -93,7 +97,7 @@
         var output = '';
         if (data.data.length){
           output="<ul>";
-          for (var i=0, c=0 ;(c<5 && i<data.data.length);i++){
+          for (var i=0, c=0 ;(c < settings.max_gh_projects && i < data.data.length);i++){
             var project = data.data[i];
             if (!project.fork){ //show only own projects
               output = output + '<li><span class="label label-warning"><a title="watchers" target=_blank href="'+
@@ -162,18 +166,11 @@
   var extra_content = $('#extrainfo');
   var timeout_fade = null;
 
-  //------------------------------------------
-  // Initialization  when DOM is ready
-  //------------------------------------------
-  $(function() {
 
-    $(window).resize(function(){
-      move_and_resize_if_exists();
-    });
+  var init = function() {
 
-    $(window).scroll(function(){ // looks good with no throttling.
-      move_and_resize_if_exists();
-    });
+    $(window).resize(move_and_resize_if_exists);
+    $(window).scroll(move_and_resize_if_exists);
 
     //bind static links to extra content
     $('a.extra_content').mouseover(function(ev){
@@ -187,18 +184,16 @@
     });
 
     $('a.extra_content').mouseout(function(ev){
-      timeout_fade = setTimeout(function(){
-        hide_extra_content();
-      }, 1500);
+      timeout_fade = setTimeout(hide_extra_content, 1500);
+    });
+
+    $('#extrainfo').on('mouseover', function(){
+      clearTimeout(timeout_fade);
     });
 
     //show initial element
     extra_content.fadeIn();
     show_extra_content(content[0]);
-
-    $('#extrainfo').on('mouseover', function(){
-      clearTimeout(timeout_fade);
-    });
 
     //load github projects
     github_service.getGitHubProjects('iloire', '#ghcontainer');
@@ -225,6 +220,8 @@
           cdn_img_prefix + '/2earth_01.png'
       ]);
     }
-  });
+  };
+
+  $(init);
 
 })($);
