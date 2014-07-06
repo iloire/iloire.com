@@ -1,44 +1,52 @@
+@media (min-width: 767px){
+  .wrapper {
+    width: 550px;
+    min-width: 380px;
+  }
+}
+
 @media (max-width: 767px){
-	[class*="span"], .row-fluid [class*="span"] {
-		text-align:center;
-	}
 
-	body {
-		max-width:none !important;
-		padding:0.5em 1em !important;
-	}
+  [class*="span"], .row-fluid [class*="span"] {
+    text-align:center;
+  }
 
-	header h1 {
-		font-size:3.4em !important;
-	}
+  body {
+    max-width:none !important;
+    padding:0.5em 1em !important;
+  }
 
-	header h1 span {
-		display:block;
-		font-size:0.6em !important;
-	}
+  header h1 {
+    font-size:3.4em !important;
+  }
 
-	header h1 span:before{
-		content: '' !important;
-	}
+  header h1 span {
+    display:block;
+    font-size:0.6em !important;
+  }
 
-	section h2 {
-		font-size:2em;
-	}
+  header h1 span:before{
+    content: '' !important;
+  }
 
-	#section_author {
-		font-size: 1.3em;
-	}
+  section h2 {
+    font-size:2em;
+  }
 
-	#section_author img{
-		max-width: 280px !important;
-		margin-bottom: 20px;
-	}
+  #section_author {
+    font-size: 1.3em;
+  }
 
-	#section_photo img{
-		width:100%;
-	}
+  #section_author img{
+    max-width: 280px !important;
+    margin-bottom: 20px;
+  }
 
-	#twitter_update_list ul li{
-		font-size:1em !important;
-	}
+  #section_photo img{
+    width:100%;
+  }
+
+  #twitter_update_list ul li{
+    font-size:1em !important;
+  }
 }
