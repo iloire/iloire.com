@@ -1,6 +1,6 @@
 (function($){
 
-  var DEBUG = true;
+  var DEBUG = false;
   var cdn_img_prefix = 'http://d13ry56xmap4ax.cloudfront.net';
 
   var content = {
