@@ -52,6 +52,19 @@ header h1 span:before
   font-size: 0.9em;
 }
 
+#section_code img {
+  max-width: 70px;
+}
+
+#section_code img:hover {
+  -webkit-transform:rotate(10deg);
+  transform: rotate (10deg);
+  -moz-transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;  
+}
+
 .networks{
   margin:5px 0px 0px 5px;
   display:block;
