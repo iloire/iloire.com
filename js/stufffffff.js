@@ -4,8 +4,6 @@
   var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net';
 
   var PRELOAD_IMAGES = [
-    CND_IMG_PREFIX + '/workAtlassian.jpg',
-    CND_IMG_PREFIX + '/atlassian.jpg',
     CND_IMG_PREFIX + '/shipit24.jpg',
     CND_IMG_PREFIX + '/linkedin.jpg',
     CND_IMG_PREFIX + '/bitbucket.jpg',
@@ -33,11 +31,7 @@
   };
   
   var content = {
-    'atlassian' : '<div style="position:relative">' + 
-      '<img style="width:70%" class="dropshadow" src="' + CND_IMG_PREFIX + '/atlassian.jpg">'+
-      '<img class="dropshadow" style="width:50%;position:relative;top:-180px;left:0px" src="' + CND_IMG_PREFIX + '/workAtlassian.jpg">'+
-      '<img class="dropshadow" style="width:50%;position:relative;top:-220px;left:30px" src="' + CND_IMG_PREFIX + '/shipit24.jpg">'+
-      '</div>',
+    'atlassian' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/shipit24.jpg"></div>',
     'twitter' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
     'linkedin' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/linkedin.jpg"><span>Linkedin</span></div>',
     'bitbucket' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/bitbucket.jpg"><span>Bitbucket (@iloire)</span></div>',
