@@ -1,4 +1,4 @@
-(function($){
+(function ($) {
 
   var DEBUG = false;
   var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net';
@@ -29,7 +29,7 @@
     offset_top : 80,
     cache_duration_minutes: 10
   };
-  
+
   var content = {
     'atlassian' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/shipit24.jpg"></div>',
     'twitter' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
@@ -45,13 +45,15 @@
     'watchmen' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
     'codemotion_node': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/building-with-node.jpg"></div>',
     'directorio_cachirulo': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
-    'letsnode':'<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/letsnode.jpg"></div>',
-    'backbone_google_maps': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
-    'atlasboard':'<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
+    'letsnode' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/letsnode.jpg"></div>',
+    'backbone_google_maps' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
+    'atlasboard' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
   };
 
-  function log(o){
-    if (DEBUG) console.log(o);
+  function log(o) {
+    if (DEBUG) {
+      console.log(o);
+    }
   }
 
   var preload = function (arrayOfImages) {
