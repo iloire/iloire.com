@@ -3,7 +3,12 @@
   var DEBUG = false;
   var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net';
 
+  if (DEBUG){
+    CND_IMG_PREFIX = 'images';
+  }
+
   var PRELOAD_IMAGES = [
+    CND_IMG_PREFIX + '/dgallery1.png',
     CND_IMG_PREFIX + '/shipit24.jpg',
     CND_IMG_PREFIX + '/linkedin.jpg',
     CND_IMG_PREFIX + '/bitbucket.jpg',
@@ -31,6 +36,7 @@
   };
 
   var content = {
+    'dgallery' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/dgallery1.png"><span>dGallery, a sexy asp.net mvc photo gallery</span></div>',
     'atlassian' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/shipit24.jpg"></div>',
     'twitter' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/twitter.jpg"><span>Twitter (@ivanloire)</span></div>',
     'linkedin' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/linkedin.jpg"><span>Linkedin</span></div>',
