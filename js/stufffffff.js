@@ -21,7 +21,7 @@
     CND_IMG_PREFIX + '/atlasboard-01.jpg',
     CND_IMG_PREFIX + '/math_race01.png',
     CND_IMG_PREFIX + '/triatlonaragon.jpg',
-    CND_IMG_PREFIX + '/watchmen.jpg',
+    CND_IMG_PREFIX + '/watchmen.png',
     CND_IMG_PREFIX + '/building-with-node.jpg',
     CND_IMG_PREFIX + '/directorio.jpg',
     CND_IMG_PREFIX + '/2earth_01.png'
@@ -48,7 +48,7 @@
     'math_race' : '<div><img src="' + CND_IMG_PREFIX + '/math_race02.png"></div>',
     'fatri' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
     '2earth' : '<div><img src="' + CND_IMG_PREFIX + '/2earth_01.png"></div>',
-    'watchmen' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/watchmen.jpg"><span>A node.js service monitor. Source code available on GitHub</span></div>',
+    'watchmen' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/watchmen.png"><span>A node.js service monitor. Source code available on GitHub</span></div>',
     'codemotion_node': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/building-with-node.jpg"></div>',
     'directorio_cachirulo': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
     'letsnode' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/letsnode.jpg"></div>',
