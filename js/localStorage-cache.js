@@ -1,4 +1,4 @@
-define('localStorage-cache', function($){
+define('localStorage-cache', function(){
 
   return  {
 

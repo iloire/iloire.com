@@ -1,5 +1,4 @@
-(function(){
-
+define('background-effect', function(){
 
   var SWARM_COLORS = ['#fff9e6','#FBFBFB', '#FAFAFA', '#F7F7F7', "F8F8F8", "#f5f5f5", "F9F9F9"];
   var BG_COLORS = SWARM_COLORS;
@@ -8,6 +7,12 @@
   var SQUARE_SIZE = 6;
   var SWARM_PADDING = 200;
   var ITERATIONS_PER_TICK = 50;
+
+  var cursorX;
+  var cursorY;
+
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
 
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -71,26 +76,28 @@
     canvas.height = window.innerHeight;
   }
 
-  var canvas = document.getElementById('c');
-  var cursorX;
-  var cursorY;
 
-  document.onmousemove = function(e){
-    cursorX = e.pageX;
-    cursorY = e.pageY;
+  return {
+
+    init: function(){
+
+      document.onmousemove = function(e){
+        cursorX = e.pageX;
+        cursorY = e.pageY;
+      };
+
+      window.addEventListener("resize", function(e){
+        resizeCanvas(canvas);
+      });
+
+      resizeCanvas(canvas);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      paintBg(canvas.width, canvas.height);
+
+      setInterval(tick, 20);
+    }
   };
 
-  window.addEventListener("resize", function(e){
-    resizeCanvas(canvas);
-  });
-
-  resizeCanvas(canvas);
-
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  paintBg(canvas.width, canvas.height);
-
-  setInterval(tick, 20);
-
-})();
+});

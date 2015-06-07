@@ -1,4 +1,4 @@
-require(['jquery', 'gh', 'image-preloader'], function($, gh, preloader){
+require(['jquery', 'gh', 'image-preloader', 'background-effect'], function($, gh, preloader, backgroundEffect){
 
   var DEBUG = true;
   var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net';
@@ -126,6 +126,7 @@ require(['jquery', 'gh', 'image-preloader'], function($, gh, preloader){
     extra_content.fadeIn();
     show_extra_content(content[0]);
 
+    backgroundEffect.init();
 
     var where = document.getElementById('ghcontainer');
     where.innerHTML = 'loading...';
