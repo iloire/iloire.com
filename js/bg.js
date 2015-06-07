@@ -8,8 +8,8 @@ define('background-effect', function(){
   var SWARM_PADDING = 200;
   var ITERATIONS_PER_TICK = 50;
 
-  var cursorX;
-  var cursorY;
+  var cursorX = 0;
+  var cursorY = 0;
 
   var canvas = document.getElementById('c');
   var ctx = canvas.getContext('2d');
@@ -76,15 +76,14 @@ define('background-effect', function(){
     canvas.height = window.innerHeight;
   }
 
-
   return {
 
     init: function(){
 
-      document.onmousemove = function(e){
+      document.addEventListener('mousemove', function(e){
         cursorX = e.pageX;
         cursorY = e.pageY;
-      };
+      });
 
       window.addEventListener("resize", function(e){
         resizeCanvas(canvas);
