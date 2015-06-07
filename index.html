@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<!-- 
+
+CREDITS:
+
+  - Map of Europe SVG: http://commons.wikimedia.org/wiki/File:Blank_map_of_Europe_1929-1938.svg#/media/File:Blank_map_of_Europe_1929-1938.svg
+  Creative Commons Attribution-Share Alike 3.0
+
+  - Pulse effect in map : http://codepen.io/andreasstorm/pen/ClguF
+
+ -->
+
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Language" content="en">
   <title>Iván Loire</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="8hfmMJP6DYZqjCNko9PZUcTJcRUXz-X0hHryWqWkVwE" />
-  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  <link href="css/responsive.css" rel="stylesheet" type="text/css">
-  <!-- Pulled from http://code.google.com/p/html5shiv/ -->
+  <link href="build/app.css" rel="stylesheet" type="text/css">
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
+  
   <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-  <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">  
 </head>
 
 <body>
+
+  <canvas id="c" style="z-index:-1;position:fixed;top:0;left:0"></canvas>
+
   <div class="wrapper">
 
     <header>
       <h1>iván loire
-        <span>full stack web developer</span>
+        <span>full stack doer</span>
       </h1>
     </header>
 
@@ -33,7 +46,7 @@
       <div class="row-fluid">
 
         <div class="span3 centered">
-          <img alt="iván loire" src="images/ivan06.jpg" />
+          <img alt="iván loire" src="images/ivan.jpg" />
         </div>
 
         <div class="span9">
@@ -42,30 +55,15 @@
             <span class="location">
               Born in
             <a data-contentid="map" class="extra_content tag2 high" href="https://maps.google.es/maps?q=zaragoza+spain&ie=UTF-8&hq=&hnear=0xd5914ee3f656ef9:0xed69893e3ec7bece,Zaragoza&gl=es&ei=QbZTUPDYGs2BhQfI_4C4BA&ved=0CCMQ8gEwAA" target="_blank" class="tag3">Zaragoza</a>,
+            love working at <a data-contentid="atlassian" class="extra_content" target="_blank" href="http://www.atlassian.com">Atlassian</a> (Sydney).
             </span>
 
-            <span class="location">
-              enjoying life in
-            <a data-contentid="map_sydney" class="extra_content tag2 high" href="http://maps.google.com.au/maps?q=Sydney,+New+South+Wales&hl=en&ll=-28.22697,152.841797&spn=28.070878,14.501953&sll=-33.796924,150.922433&sspn=0.833096,0.453186&oq=sydnet&hnear=Sydney+New+South+Wales&t=m&z=4" target="_blank" class="tag3">Sydney</a>, love working at <a data-contentid="atlassian" class="extra_content" target="_blank" href="http://www.atlassian.com">Atlassian</a>.
-            </span>
-
-            <div class="social">
-              <a data-contentid="twitter" href="https://twitter.com/ivanloire" class="extra_content twitter-follow-button" data-show-count="false" data-dnt="true">
-                <i class="icon-twitter"></i>
-              </a>
-
-               <a data-contentid="linkedin" class="extra_content" href="http://www.linkedin.com/in/iloire" target="_blank">
-                <i class="icon-linkedin"></i>
-               </a>
-    
-               <a data-contentid="bitbucket" class="extra_content" href="https://bitbucket.org/iloire" target="_blank">
-                <i class="icon-bitbucket"></i>
-               </a>
-    
-               <a data-contentid="github" class="extra_content" href="https://github.com/iloire" target="_blank">
-                <i class="icon-github"></i>
-               </a>
-             </div>
+            
+            <p>
+              <small>
+              ivan at iloire.com
+              </small>
+            </p>
 
            </div>
 
@@ -76,10 +74,7 @@
     <section id="section_code">
     <h2>recent work <small>or interests</small></h2>
     <div class="row-fluid">
-      <div class="span2">
-        <img alt="bitbucket.org" src="images/bitbucket.png">
-      </div>
-      <div class="span10">
+      <div class="span12">
         <div class="tags">
 
           <a data-contentid="dgallery" class="extra_content tag3 high" href="http://dGallery.aspphotogallery.net?ref=personalsite" target="_blank" title="dGallery, a sexy photo gallery in asp.net mvc 5">dGallery</a>
@@ -98,6 +93,9 @@
 
           <a data-contentid="backbone_google_maps" class="extra_content tag3" href="http://iloire.github.com/backbonejs-googlemaps-demo/" target="_blank">backbone.js and google maps demo</a>
 
+          <a data-contentid="2earth" class="extra_content tag3 high" target="_blank" href="http://www.2earth.org">places and faces around the world
+          </a>
+
         </div>
       </div>
     </div>
@@ -111,60 +109,10 @@
     <div id="ghcontainer">loading...</div>
     </section>
 
-    <section id="section_slides">
-    <h2>talks, slides, <small>etc.</small></h2>
-    <div class="row-fluid">
-        <div class="tags">
-
-          <a data-contentid="codemotion_node" class="extra_content tag3 high" target="_blank" href="http://www.slideshare.net/iloire/building-web-apps-with-nodejs-socketio-knockoutjs-and-zombiejs-codemotion-2012">
-            Building web apps with node.js, socket.io, knockout.js and zombie.js
-          </a>
-
-        </div>
-    </div>
-    </section>
-
-    <section id="section_photo">
-    <h2>photo <small>faces and places</small></h2>
-    <div class="row-fluid">
-      <div class="span3">
-
-        <a data-contentid="2earth" class="extra_content tag3 high" target="_blank" href="http://www.2earth.org">
-        <img alt="Author: Javier Agustín. In the picture: Pili Agustín" src="images/filosofia_big_by_javier_agustin_rounded.jpg" />
-        </a>
-      </div>
-      <div class="span9">
-        <div class="tags">
-          <a data-contentid="2earth" class="extra_content tag3 high" target="_blank" href="http://www.2earth.org">Places and faces around the world
-          </a>
-        </div>
-      </div>
-    </div>
-    </section>
-
-
-  <footer>
-    <small>
-    <div xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/" about="http://subtlepatterns.com/"><span property="dct:title">background license: Subtle Patterns</span> (<a rel="cc:attributionURL" property="cc:attributionName" href="http://subtlepatterns.com">Subtle Patterns</a>) / <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>
-    </div>
-    <div>
-      avatar picture thanks to <a href="http://www.allafatia.com/">Valter Fatia</a>
-    </div>
-    <div>
-      contact: ivan at iloire.com
-    </div>
-    </small>
-  </footer>
-
-
+    <h2>twitter timeline</h2>
+    <a class="twitter-timeline" href="https://twitter.com/ivanloire" data-widget-id="607403324275441664">Tweets by @ivanloire</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
  </div>
-
-<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.1.min.js"></script>
-<script>
-if (typeof jQuery == 'undefined') {
-    document.write(unescape("%3Cscript src='js/jquery-1.11.1.min.js' type='text/javascript'%3E%3C/script%3E"));
-}
-</script>
 
 
 <script>
@@ -175,10 +123,10 @@ if (typeof jQuery == 'undefined') {
 
   ga('create', 'UA-300651-41', 'bitbucket.org');
   ga('send', 'pageview');
-
 </script>
 
-<script async type="text/javascript" src="js/stufffffff.js"></script>
+<script async type="text/javascript" src="build/vendor.js"></script>
+<script async type="text/javascript" src="build/app.js"></script>
 
 </body>
 </html>

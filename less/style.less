@@ -1,6 +1,5 @@
 body {
   padding:1em 2em;
-  background-image: url('../images/backgrounds/bg_grey.png');
   font-family: 'Ubuntu', sans-serif;
 }
 
@@ -10,7 +9,7 @@ h1, h2, h3, h4, h5, h6 {
 
 section {
   margin-bottom:0.5em;
-  padding:0.5em;
+  padding:0.5em 0;
 }
 
 a {
@@ -38,6 +37,7 @@ header{
 #section_author {
 
   #me {
+    font-size:1.2em;
     text-align:left;
     padding:10px;
     background-color:#fff;
@@ -129,32 +129,60 @@ div.tags
   text-align:center !important;
 }
 
+.label-info {
+  background-color: #0ea7b5;
+}
+
 #ghcontainer { 
 
   ul {
     text-align:left;
     list-style-type: none;
     margin:0;
-    padding:10px;
+    padding:1em 0;
   }
 
   ul li {
     text-transform: lowercase;
+    font-size:1.1em;
+    margin-bottom: 0.2em;
   }
 
-  .label, #ghcontainer .badge{
-    font-weight: normal;
+  .forks, .watchers {
+    display:inline-block;
+    width:3em;
   }
 }
 
 #extrainfo {
-  div {
-    text-align:center;
+  
+  position: absolute;
+
+  img {
+    width:100%;
+  }
+
+  > div {
+
+    padding:50px;
+
     span{
       font-size:1.3em;
       text-transform:lowercase;
       display:block;
     }
+
+    &.map-europe {
+      .img-wrapper {
+        text-align: right;
+
+        img {
+          opacity:0.6;
+        }
+      }
+      padding:0px !important;
+    }
+
   }
 }
 
@@ -164,9 +192,11 @@ div.tags
 
 img.dropshadow {
   -webkit-box-shadow: 25px 25px 25px rgba(50, 50, 50, 0.3);
-  margin-bottom: 40px;
   -moz-box-shadow:    25px 25px 25px rgba(50, 50, 50, 0.3);
+
+  margin-bottom: 40px;
   box-shadow:         25px 25px 25px rgba(50, 50, 50, 0.3);
+  border-radius: 2px;
 }
 
 /* social */
@@ -194,6 +224,5 @@ div.social {
 
 footer {
   padding: 0.5em;
-  margin-top: 30px;
   color:#c2c2c2;
 }

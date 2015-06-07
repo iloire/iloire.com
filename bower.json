@@ -1,0 +1,20 @@
+{
+  "name": "iloire.bitbucket.org",
+  "version": "0.0.0",
+  "authors": [
+    "Ivan Loire <iloire@atlassian.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "almond": "~0.3.1",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.4"
+  }
+}
