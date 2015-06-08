@@ -3,19 +3,12 @@ var plugins = require('gulp-load-plugins')();
 var main_bower_files = require('main-bower-files');
 
 function js(shouldMinify) {
-  return gulp.src(['./js/*.js'])
+  return gulp.src(main_bower_files().concat(['./js/*.js']))
+      .pipe(plugins.filter('*.js'))
       // .pipe(plugins.jshint())
       // .pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.concat('app.js'))
       .pipe(plugins.if(shouldMinify, plugins.uglify()))
-      .pipe(gulp.dest('./build'));
-}
-
-function bowerJS(shouldMinify) {
-  return gulp.src(main_bower_files())
-      .pipe(plugins.filter('*.js'))
-      .pipe(plugins.if(shouldMinify, plugins.uglify()))
-      .pipe(plugins.concat('vendor.js'))
       .pipe(gulp.dest('./build'));
 }
 
@@ -47,7 +40,6 @@ gulp.task('less', function () {
 gulp.task('build', function () {
   less();
   js(true);
-  bowerJS(true);
 });
 
 gulp.task('watch', function () {
