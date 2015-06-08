@@ -22,8 +22,6 @@ define('background-effect', function(){
     return colors[getRandomInt(0, colors.length)];
   }
 
-  function isOdd(num) { return num % 2;}
-
   function createSquare(x, y, w, h, c){
     ctx.beginPath();
     ctx.fillStyle = c;
@@ -48,6 +46,7 @@ define('background-effect', function(){
       var x = cursorX + Math.cos(angle)*radius;
       var y = cursorY + Math.sin(angle)*radius;
 
+      // from pixels back to columns and rows
       var colX = parseInt(x / (SQUARE_SIZE + SEPARATOR_SIZE));
       var colY = parseInt(y / (SQUARE_SIZE + SEPARATOR_SIZE));
 
@@ -78,6 +77,11 @@ define('background-effect', function(){
 
   return {
 
+    canvasSupported: function(){
+      var elem = document.createElement('canvas');
+      return !!(elem.getContext && elem.getContext('2d'));
+    },
+
     init: function(){
 
       document.addEventListener('mousemove', function(e){
@@ -90,8 +94,6 @@ define('background-effect', function(){
       });
 
       resizeCanvas(canvas);
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       paintBg(canvas.width, canvas.height);
 

@@ -1,3 +1,13 @@
+define('analytics', function () {
+
+  return {
+    track: function (cat, action, label, val) {
+      if (window.ga) {
+        window.ga('send', 'event', cat, action, label, val);
+      }
+    }
+  }
+});
 define('background-effect', function(){
 
   var SWARM_COLORS = ['#fff9e6','#FBFBFB', '#FAFAFA', '#F7F7F7', "F8F8F8", "#f5f5f5", "F9F9F9"];
@@ -21,8 +31,6 @@ define('background-effect', function(){
   function getRandomColor(colors) {
     return colors[getRandomInt(0, colors.length)];
   }
-
-  function isOdd(num) { return num % 2;}
 
   function createSquare(x, y, w, h, c){
     ctx.beginPath();
@@ -48,6 +56,7 @@ define('background-effect', function(){
       var x = cursorX + Math.cos(angle)*radius;
       var y = cursorY + Math.sin(angle)*radius;
 
+      // from pixels back to columns and rows
       var colX = parseInt(x / (SQUARE_SIZE + SEPARATOR_SIZE));
       var colY = parseInt(y / (SQUARE_SIZE + SEPARATOR_SIZE));
 
@@ -78,6 +87,11 @@ define('background-effect', function(){
 
   return {
 
+    canvasSupported: function(){
+      var elem = document.createElement('canvas');
+      return !!(elem.getContext && elem.getContext('2d'));
+    },
+
     init: function(){
 
       document.addEventListener('mousemove', function(e){
@@ -91,11 +105,66 @@ define('background-effect', function(){
 
       resizeCanvas(canvas);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       paintBg(canvas.width, canvas.height);
 
       setInterval(tick, 20);
+    }
+  };
+
+});
+define('content-hover', ['settings'], function(
+    SETTINGS
+){
+
+  var extraContent = $('#extrainfo');
+
+  function hideExtraContent () {
+    extraContent.fadeOut(800, function(){
+      $(this).empty();
+    });
+  }
+
+  function shouldEnableExtraContent(){
+    return (window.innerWidth > SETTINGS.min_window_width);
+  }
+
+  function moveAndResizeExtraContent(){
+    if (shouldEnableExtraContent()){
+      var width = window.innerWidth - SETTINGS.left_margin_extra_content;
+      extraContent.css({
+        top: $(window).scrollTop(),
+        right: 0,
+        width: width + 'px'
+      });
+    }
+    else {
+      hideExtraContent();
+    }
+  }
+
+  return {
+
+    init : function (content) {
+
+      var timeoutFade = null;
+
+      window.addEventListener("resize", moveAndResizeExtraContent);
+      window.onscroll = moveAndResizeExtraContent;
+
+      $('a.extra_content').mouseover(function(ev){
+        clearTimeout(timeoutFade);
+        if (shouldEnableExtraContent()){
+          var id = $(this).attr('data-contentid');
+          extraContent.html(content[id]).fadeIn();
+          moveAndResizeExtraContent();
+        }
+      }).mouseout(function(){
+        timeoutFade = setTimeout(hideExtraContent, 1500);
+      });
+
+      extraContent.on('mouseover', function(){
+        clearTimeout(timeoutFade);
+      });
     }
   };
 
@@ -140,170 +209,96 @@ define('localStorage-cache', function(){
   };
 
 });
-require(['jquery', 'gh', 'image-preloader', 'background-effect'], function($, gh, preloader, backgroundEffect){
+require(['jquery', 'gh', 'image-preloader', 'background-effect', 'content-hover', 'settings'],
+    function ($,
+              gh,
+              preloader,
+              backgroundEffect,
+              contentHover,
+              SETTINGS) {
 
-  var DEBUG = true;
-  var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net';
+      var DEBUG = true;
+      var CND_IMG_PREFIX = 'http://d13ry56xmap4ax.cloudfront.net/';
 
-  if (DEBUG){
-    CND_IMG_PREFIX = 'images';
-  }
-
-  var PRELOAD_IMAGES = [
-    CND_IMG_PREFIX + '/dgallery1.png',
-    CND_IMG_PREFIX + '/shipit24.jpg',
-    CND_IMG_PREFIX + '/linkedin.jpg',
-    CND_IMG_PREFIX + '/bitbucket.jpg',
-    CND_IMG_PREFIX + '/github.jpg',
-    CND_IMG_PREFIX + '/zaragoza.jpg',
-    CND_IMG_PREFIX + '/sydney.jpg',
-    CND_IMG_PREFIX + '/backbone-googlemaps.jpg',
-    CND_IMG_PREFIX + '/letsnode.jpg',
-    CND_IMG_PREFIX + '/atlasboard-01.jpg',
-    CND_IMG_PREFIX + '/math_race01.png',
-    CND_IMG_PREFIX + '/triatlonaragon.jpg',
-    CND_IMG_PREFIX + '/watchmen.png',
-    CND_IMG_PREFIX + '/directorio.jpg',
-    CND_IMG_PREFIX + '/2earth_01.png'
-  ];
-
-  var SETTINGS = {
-    max_gh_projects: 7,
-    min_window_width : 900, //extra content will be shown for bigger sizes
-    left_margin_extra_content : 610,
-    cache_duration_minutes: 10
-  };
-
-  var content = {
-    'dgallery' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/dgallery1.png"><span>dGallery, a sexy asp.net mvc photo gallery</span></div>',
-    'atlassian' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/shipit24.jpg"></div>',
-    'linkedin' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/linkedin.jpg"><span>Linkedin</span></div>',
-    'github' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/github.jpg"><span>Github (@loire)</span></div>',
-    'map' : '<div class="map-europe"><div class=pulse></div><div class=img-wrapper><img src="' + CND_IMG_PREFIX + '/europe.svg"></div></div>',
-    'express' : '<div><img src="' + CND_IMG_PREFIX + '/express_js.png"></div>',
-    'math_race' : '<div><img src="' + CND_IMG_PREFIX + '/math_race02.png"></div>',
-    'fatri' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
-    '2earth' : '<div><img src="' + CND_IMG_PREFIX + '/2earth_01.png"></div>',
-    'watchmen' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/watchmen.png"><span>A node.js service monitor. Source code available on GitHub</span></div>',
-    'directorio_cachirulo': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
-    'letsnode' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/letsnode.jpg"></div>',
-    'backbone_google_maps' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
-    'atlasboard' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
-  };
-
-  function log(o) {
-    if (DEBUG) {
-      console.log(o);
-    }
-  }
-
-  function size_compatible_with_extra_content(){
-    var windowWidth = window.innerWidth;
-    return (windowWidth > SETTINGS.min_window_width);
-  }
-
-  function move_and_resize_if_exists(){
-    if (size_compatible_with_extra_content()){
-      var windowWidth = window.innerWidth;
-      var rightMargin = 0;
-      var max_width_extra_content = windowWidth - SETTINGS.left_margin_extra_content - rightMargin;
-
-      extra_content.css({
-        top: $(window).scrollTop(),
-        right: rightMargin,
-        width: max_width_extra_content + 'px'
-      });
-    }
-    else {
-      if (extra_content.is(":visible")){
-        hide_extra_content();
+      if (DEBUG) {
+        CND_IMG_PREFIX = 'images/';
       }
-    }
-  }
 
-  function hide_extra_content () {
-    extra_content.fadeOut(800, function(){
-      extra_content.empty();
-    });
-  }
+      var PRELOAD_IMAGES = [
+        'europe.svg', 'dgallery1.png', 'shipit24.jpg', 'backbone-googlemaps.jpg', 'letsnode.jpg',
+        'atlasboard-01.jpg', 'math_race01.png', 'triatlonaragon.jpg', 'watchmen.png', 'directorio.jpg',
+        '2earth_01.png'
+      ].map(function(i){return CND_IMG_PREFIX + '' + i});
 
-  function show_extra_content (content) {
-    extra_content.html(content);
-    move_and_resize_if_exists();
-  }
+      var content = {
+        'dgallery': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'dgallery1.png"><span>dGallery, a sexy asp.net mvc photo gallery</span></div>',
+        'atlassian': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'shipit24.jpg"></div>',
+        'map': '<div class="map-europe"><div class=pulse></div><div class=img-wrapper><img src="' + CND_IMG_PREFIX + 'europe.svg"></div></div>',
+        'express': '<div><img src="' + CND_IMG_PREFIX + 'express_js.png"></div>',
+        'math_race': '<div><img src="' + CND_IMG_PREFIX + 'math_race02.png"></div>',
+        'fatri': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'triatlonaragon.jpg"><span>Triatlhon regional association. I created and maintain the website</span></div>',
+        '2earth': '<div><img src="' + CND_IMG_PREFIX + '2earth_01.png"></div>',
+        'watchmen': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'watchmen.png"><span>A node.js service monitor. Source code available on GitHub</span></div>',
+        'directorio_cachirulo': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'directorio.jpg"><span>Local freelance directory. Software created with node.js and redis. Available on GitHub</span></div>',
+        'letsnode': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'letsnode.jpg"></div>',
+        'backbone_google_maps': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'backbone-googlemaps.jpg"><span>Playing with Backbone.js and Google Maps..</span></div>',
+        'atlasboard': '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + 'atlasboard-01.jpg"><span>Atlasboard, simple and beautiful dashboards for everyone</span></div>',
+      };
 
-  function track(cat, action, label, val){
-    ga('send', 'event', cat, action, label, val);
-  }
-
-  var extra_content = $('#extrainfo');
-  var timeout_fade = null;
-
-
-  var init = function() {
-
-    window.addEventListener("resize", move_and_resize_if_exists);
-    window.onscroll = move_and_resize_if_exists;
-
-    //bind static links to extra content
-    $('a.extra_content').mouseover(function(ev){
-      clearTimeout(timeout_fade);
-      if (size_compatible_with_extra_content()){
-        extra_content.fadeIn();
-        var id = $(this).attr('data-contentid');
-        show_extra_content(content[id]);
-        track('general', 'mouseover', id);
+      function log(o) {
+        if (DEBUG) {
+          console.log(o);
+        }
       }
-    });
 
-    $('a.extra_content').mouseout(function(ev){
-      timeout_fade = setTimeout(hide_extra_content, 1500);
-    });
-
-    $('#extrainfo').on('mouseover', function(){
-      clearTimeout(timeout_fade);
-    });
-
-    //show initial element
-    extra_content.fadeIn();
-    show_extra_content(content[0]);
-
-    backgroundEffect.init();
-
-    var where = document.getElementById('ghcontainer');
-    where.innerHTML = 'loading...';
-    gh.getGitHubProjects('iloire', SETTINGS, function(data){
-        data.data.sort(function sorter(a,b) { return b.watchers - a.watchers; });
+      function massageGhData(data) {
+        data.data.sort(function sorter(a, b) {
+          return b.watchers - a.watchers;
+        });
         var output = '';
-        if (data.data.length){
-          output="<ul>";
-          for (var i=0, c=0 ;(c < SETTINGS.max_gh_projects && i < data.data.length);i++){
+        if (data.data.length) {
+          output = "<ul>";
+          for (var i = 0, c = 0; (c < SETTINGS.max_gh_projects && i < data.data.length); i++) {
             var project = data.data[i];
-            if (!project.fork){ //show only own projects
-              output = output + '<li><span class="label label-warning watchers"><a title="watchers" target=_blank href="'+
-                project.html_url + '/watchers">' + project.watchers + '</a></span>' +
-                ' <span class="label label-info forks"><a title="forks" target=_blank href="' + project.html_url +
-                '/network">' + project.forks + '</a></span>' + '  <a class="gh-project" target=_blank href="' +
-                project.html_url + '">' + project.name + '</a>: <span class="gh-project-description">' + project.description + '</span></li>';
+            if (!project.fork) { //show only own projects
+              output = output + '<li><span class="label label-warning watchers"><a title="watchers" target=_blank href="' +
+              project.html_url + '/watchers">' + project.watchers + '</a></span>' +
+              ' <span class="label label-info forks"><a title="forks" target=_blank href="' + project.html_url +
+              '/network">' + project.forks + '</a></span>' + '  <a class="gh-project" target=_blank href="' +
+              project.html_url + '">' + project.name + '</a>: <span class="gh-project-description">' + project.description + '</span></li>';
               c++;
             }
           }
           output = output + "</ul>";
         }
-        else{
+        else {
           output = '<p>No projects to show.</p>';
         }
-        where.innerHTML = output;
+        return output;
+      }
+
+      var init = function () {
+
+        if (backgroundEffect.canvasSupported()) {
+          backgroundEffect.init();
+        }
+
+        contentHover.init(content);
+
+        var where = document.getElementById('ghcontainer');
+        where.innerHTML = 'loading...';
+        gh.getGitHubProjects('iloire', SETTINGS, function (data) {
+          where.innerHTML = massageGhData(data);
+        });
+
+        if (window.innerWidth > SETTINGS.min_window_width) {
+          preloader.preload(PRELOAD_IMAGES);
+        }
+      };
+
+      init();
+
     });
-
-    if (size_compatible_with_extra_content()){
-      preloader.preload(PRELOAD_IMAGES);
-    }
-  };
-
-  init();
-
-});
 
 
 define('gh', ['jquery', 'localStorage-cache'], function($, cacheService){
@@ -313,18 +308,28 @@ define('gh', ['jquery', 'localStorage-cache'], function($, cacheService){
     getGitHubProjects : function (user, options, cb){
       var cache = cacheService.get('gh-feed');
       if (cache){
-        //where.innerHTML = cache;
-        //track('general', 'cache-hit', 'gh-feed');
         return cb(JSON.parse(cache));
       }
 
       $.getJSON('https://api.github.com/users/' + user + '/repos?per_page=50&callback=?', function(data){
         cb(data);
-        cacheService.set('gh-feed', JSON.stringify(data), 60 * options.cache_duration_minutes);
+        cacheService.set('gh-feed', JSON.stringify(data), 60 * (options.cache_duration_minutes || 10));
       });
     }
   };
 
   return github_service;
+
+});
+define('settings', function(){
+
+  var SETTINGS = {
+    max_gh_projects: 7,
+    min_window_width: 900, //extra content will be shown for bigger sizes
+    left_margin_extra_content: 610,
+    cache_duration_minutes: 10
+  };
+
+  return SETTINGS;
 
 });
