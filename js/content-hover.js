@@ -6,7 +6,7 @@ define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
     'atlasboard-01.jpg', 'math_race01.png', 'triatlonaragon.jpg', 'watchmen.png', 'directorio.jpg',
     '2earth_01.png'
   ].map(function (i) {
-        return SETTINGS.CND_IMG_PREFIX + i
+        return SETTINGS.CND_IMG_PREFIX + i;
       });
 
   var CONTENT = {

@@ -26,7 +26,7 @@ define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover
           var html = markdown.toHTML(window.atob(data.content));
           container.append($('<div />').addClass('gh-readme').html(html));
           contentHover.showExtraContent(container);
-        })
+        });
       });
     }
   };

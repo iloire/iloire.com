@@ -5,8 +5,8 @@ var main_bower_files = require('main-bower-files');
 function js(shouldMinify) {
   return gulp.src(main_bower_files().concat(['./js/*.js']))
       .pipe(plugins.filter('*.js'))
-      // .pipe(plugins.jshint())
-      // .pipe(plugins.jshint.reporter('default'))
+      //.pipe(plugins.jshint())
+      //.pipe(plugins.jshint.reporter('default'))
       .pipe(plugins.concat('app.js'))
       .pipe(plugins.if(shouldMinify, plugins.uglify()))
       .pipe(gulp.dest('./build'));

@@ -6,5 +6,6 @@ define('analytics', function () {
         window.ga('send', 'event', cat, action, label, val);
       }
     }
-  }
+  };
+
 });
