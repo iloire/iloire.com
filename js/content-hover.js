@@ -25,6 +25,10 @@ define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
 
   var extraContent = $('#extrainfo');
 
+  function getBodyContainerWidth(){
+    return $('body').width();
+  }
+
   function hideExtraContent() {
     extraContent.fadeOut(800, function () {
       $(this).empty();
@@ -32,16 +36,16 @@ define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
   }
 
   function shouldEnableExtraContent() {
-    return (window.innerWidth > SETTINGS.min_window_width);
+    return (getBodyContainerWidth() > SETTINGS.min_window_width);
   }
 
   function moveAndResizeExtraContent() {
     if (shouldEnableExtraContent()) {
-      var width = window.innerWidth - SETTINGS.left_margin_extra_content;
+      var extraContentWidth = getBodyContainerWidth() - $('.wrapper').width();
       extraContent.css({
         top: $(window).scrollTop(),
         right: 0,
-        width: width + 'px'
+        width: extraContentWidth + 'px'
       });
     }
     else {
@@ -60,7 +64,7 @@ define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
 
     init: function () {
 
-      if (window.innerWidth > SETTINGS.min_window_width) {
+      if (getBodyContainerWidth() > SETTINGS.min_window_width) {
         preloader.preload(PRELOAD_IMAGES);
       }
 

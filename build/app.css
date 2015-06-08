@@ -411,6 +411,12 @@
     min-width: 380px;
   }
 }
+@media (min-width: 1500px) {
+  .wrapper {
+    width: 750px;
+    min-width: 580px;
+  }
+}
 @media (max-width: 767px) {
   [class*="span"],
   .row-fluid [class*="span"] {
@@ -449,8 +455,10 @@
 }
 
 body {
+  max-width: 1800px;
   padding: 1em 2em;
   font-family: 'Ubuntu', sans-serif;
+  position: relative;
 }
 h1,
 h2,
