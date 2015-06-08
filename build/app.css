@@ -74,7 +74,6 @@
 }
 .gh-readme {
   padding: 40px 20px;
-  overflow: scroll;
 }
 .gh-readme img {
   max-width: 100%;
@@ -99,7 +98,7 @@
 #ghcontainer ul li {
   text-transform: lowercase;
   font-size: 1.1em;
-  margin-bottom: 0.2em;
+  margin-bottom: 0.5em;
 }
 #ghcontainer .forks,
 #ghcontainer .watchers {
@@ -422,6 +421,9 @@
   .row-fluid [class*="span"] {
     text-align: center;
   }
+  div.tags {
+    font-size: 0.9em;
+  }
   body {
     max-width: none !important;
     padding: 0.5em 1em !important;
@@ -541,26 +543,25 @@ div.tags .high {
   color: orange !important;
 }
 div.tags > a {
-  margin-left: 10px;
+  margin-left: 0.8em;
   color: #333333;
-  line-height: 25px;
   text-decoration: none;
 }
 div.tags a:hover {
   color: orange;
 }
 div.tags a.tag1 {
-  font-size: 10px;
+  font-size: 0.8em;
 }
 div.tags a.tag2 {
-  font-size: 14px;
+  font-size: 1.1em;
 }
 div.tags a.tag3 {
-  font-size: 18px;
+  font-size: 1.3em;
 }
 div.tags a.tag4 {
-  font-size: 24px;
+  font-size: 1.5em;
 }
 div.tags a.tag5 {
-  font-size: 28px;
+  font-size: 2.1em;
 }
