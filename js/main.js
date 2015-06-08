@@ -8,13 +8,9 @@ require(['jquery', 'gh', 'image-preloader', 'background-effect'], function($, gh
   }
 
   var PRELOAD_IMAGES = [
+    CND_IMG_PREFIX + '/europe.svg',
     CND_IMG_PREFIX + '/dgallery1.png',
     CND_IMG_PREFIX + '/shipit24.jpg',
-    CND_IMG_PREFIX + '/linkedin.jpg',
-    CND_IMG_PREFIX + '/bitbucket.jpg',
-    CND_IMG_PREFIX + '/github.jpg',
-    CND_IMG_PREFIX + '/zaragoza.jpg',
-    CND_IMG_PREFIX + '/sydney.jpg',
     CND_IMG_PREFIX + '/backbone-googlemaps.jpg',
     CND_IMG_PREFIX + '/letsnode.jpg',
     CND_IMG_PREFIX + '/atlasboard-01.jpg',
@@ -35,8 +31,6 @@ require(['jquery', 'gh', 'image-preloader', 'background-effect'], function($, gh
   var content = {
     'dgallery' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/dgallery1.png"><span>dGallery, a sexy asp.net mvc photo gallery</span></div>',
     'atlassian' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/shipit24.jpg"></div>',
-    'linkedin' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/linkedin.jpg"><span>Linkedin</span></div>',
-    'github' : '<div><img class="dropshadow" src="' + CND_IMG_PREFIX + '/github.jpg"><span>Github (@loire)</span></div>',
     'map' : '<div class="map-europe"><div class=pulse></div><div class=img-wrapper><img src="' + CND_IMG_PREFIX + '/europe.svg"></div></div>',
     'express' : '<div><img src="' + CND_IMG_PREFIX + '/express_js.png"></div>',
     'math_race' : '<div><img src="' + CND_IMG_PREFIX + '/math_race02.png"></div>',
