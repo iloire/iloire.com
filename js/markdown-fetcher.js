@@ -20,10 +20,18 @@ define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover
           return;
         }
         service.fetch('iloire', $(this).data('repo'), {cache_duration_minutes: 60}, function (data) {
+          var html;
+          try {
+            html = markdown.toHTML(window.atob(data.content));
+          }
+          catch (err) {
+            console.error('Error parsing markdown');
+            console.error(err);
+            return;
+          }
           var container = $('<div/>').addClass('gh-preview');
           container.append('<span class="header">github\'s readme preview</span>');
           container.append('<span class="help">this is just a partial preview fetched from gh. click on the link to go to the project repo</span>');
-          var html = markdown.toHTML(window.atob(data.content));
           container.append($('<div />').addClass('gh-readme').html(html));
           contentHover.showExtraContent(container);
         });
