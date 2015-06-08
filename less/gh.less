@@ -1,0 +1,70 @@
+@rotation: -5deg;
+
+.gh-preview {
+  position:relative;
+
+  span.header {
+    color: white;
+    background-color: #0ea7b5;
+    border-radius: 10px;
+    padding:0.1em 0.5em;
+    font-size: 2em;
+
+    display:inline-block;
+    -ms-transform: rotate(@rotation);
+    -webkit-transform: rotate(@rotation);
+    transform: rotate(@rotation);
+  }
+
+  span.help {
+    position:absolute;
+    right:10%;
+    top: 100px;
+    color: #999;
+    display:inline-block;
+    text-align: right;
+  }
+
+}
+
+.gh-readme {
+  padding: 40px 20px;
+  overflow: scroll;
+
+  img {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size:2em;
+  }
+
+  h2 {
+    font-size:1.6em;
+  }
+
+  h3, h4, h5 {
+    font-size:1.1em;
+  }
+}
+
+#ghcontainer {
+
+  ul {
+    text-align:left;
+    list-style-type: none;
+    margin:0;
+    padding:1em 0;
+  }
+
+  ul li {
+    text-transform: lowercase;
+    font-size:1.1em;
+    margin-bottom: 0.2em;
+  }
+
+  .forks, .watchers {
+    display:inline-block;
+    width:3em;
+  }
+}

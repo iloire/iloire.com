@@ -1,6 +1,6 @@
 define('gh', ['jquery', 'localStorage-cache'], function($, cacheService){
 
-  var github_service = {
+  return {
 
     getGitHubProjects : function (user, options, cb){
       var cache = cacheService.get('gh-feed');
@@ -14,7 +14,5 @@ define('gh', ['jquery', 'localStorage-cache'], function($, cacheService){
       });
     }
   };
-
-  return github_service;
 
 });

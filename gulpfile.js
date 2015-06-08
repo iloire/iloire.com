@@ -29,6 +29,7 @@ function less() {
 function watch() {
   gulp.watch('./js/**', ['js-dev']);
   gulp.watch('./less/*', ['less']);
+  gulp.watch('./bower_components/**', ['build']);
 }
 
 gulp.task('js-dev', function () {
