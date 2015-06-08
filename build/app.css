@@ -65,7 +65,9 @@
 .gh-preview span.help {
   position: absolute;
   right: 10%;
-  top: 100px;
+  top: 90px;
+  max-width: 300px;
+  font-style: italic;
   color: #999;
   display: inline-block;
   text-align: right;
