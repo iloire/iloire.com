@@ -71,7 +71,6 @@ define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
       var timeoutFade = null;
 
       window.addEventListener("resize", moveAndResizeExtraContent);
-      window.onscroll = moveAndResizeExtraContent;
 
       $('a.extra_content').mouseover(function (ev) {
         clearTimeout(timeoutFade);
