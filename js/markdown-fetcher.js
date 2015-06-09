@@ -5,53 +5,56 @@ define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover
               marked,
               cache) {
 
-  function isSupported() {
-    return !!window.atob;
-  }
-
-  function b64_to_utf8( str ) {
-    return decodeURIComponent(escape(window.atob( str )));
-  }
-
-  return {
-
-    init: function () {
-
-      if (!isSupported()) {
-        return;
+      function isSupported() {
+        return !!window.atob;
       }
 
-      $('a.gh-project').mouseover(function () {
-        if (window.innerWidth < 1200) {
-          return;
-        }
-        var key = $(this).data('repo');
-        service.fetch('iloire', key, {cache_duration_minutes: 60}, function (data) {
+      function b64_to_utf8(str) {
+        return decodeURIComponent(escape(window.atob(str)));
+      }
 
-          var html;
-          var cacheMarkdown = cache.get(key);
-          if (cacheMarkdown) {
-            html = cacheMarkdown;
+      return {
+
+        init: function () {
+
+          if (!isSupported()) {
+            return;
           }
-          else {
-            try {
-              html = b64_to_utf8(data.content);
-              html = marked(html);
-              cache.set(key, html, 60 * 30); // 30 min
-            }
-            catch (err) {
-              html = 'unavailable';
-              console.error('Error parsing markdown from github');
-              console.error(err);
-            }
+
+          function render(html) {
+            var container = $('<div/>').addClass('gh-preview');
+            container.append('<span class="header">github\'s readme preview</span>');
+            container.append('<span class="help">fetched from github. click on the link to go to the repo</span>');
+            container.append($('<div />').addClass('gh-readme').html(html));
+            contentHover.showExtraContent(container);
           }
-          var container = $('<div/>').addClass('gh-preview');
-          container.append('<span class="header">github\'s readme preview</span>');
-          container.append('<span class="help">this is just a partial preview fetched from gh. click on the link to go to the project repo</span>');
-          container.append($('<div />').addClass('gh-readme').html(html));
-          contentHover.showExtraContent(container);
-        });
-      });
-    }
-  };
-});
+
+          $('a.gh-project').mouseover(function () {
+            if (window.innerWidth < 1200) {
+              return;
+            }
+            var key = $(this).data('repo');
+            var html;
+
+            var cacheMarkdown = cache.get(key);
+            if (cacheMarkdown) {
+              render(cacheMarkdown);
+            }
+            else {
+              service.fetch('iloire', key, {cache_duration_minutes: 60}, function (data) {
+                try {
+                  html = marked(b64_to_utf8(data.content));
+                  cache.set(key, html, 60 * 30); // 30 min
+                  render(html);
+                }
+                catch (err) {
+                  render('unavailable');
+                  console.error('Error parsing markdown from github');
+                  console.error(err);
+                }
+              });
+            }
+          });
+        }
+      };
+    });
