@@ -44,7 +44,7 @@ define('background-effect', function(){
       var angle = Math.random()*Math.PI*2;
       var radius = getRandomInt(0, SWARM_PADDING);
       var x = cursorX + Math.cos(angle)*radius;
-      var y = cursorY + Math.sin(angle)*radius;
+      var y = cursorY - window.pageYOffset + Math.sin(angle)*radius;
 
       // from pixels back to columns and rows
       var colX = parseInt(x / (SQUARE_SIZE + SEPARATOR_SIZE));
