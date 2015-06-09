@@ -1,10 +1,16 @@
-define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover'],
+define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover', 'marked', 'localStorage-cache'],
     function ($,
               service,
-              contentHover) {
+              contentHover,
+              marked,
+              cache) {
 
   function isSupported() {
     return !!window.atob;
+  }
+
+  function b64_to_utf8( str ) {
+    return decodeURIComponent(escape(window.atob( str )));
   }
 
   return {
@@ -19,15 +25,25 @@ define('markdown-fetcher', ['jquery', 'service-markdown-fetcher', 'content-hover
         if (window.innerWidth < 1200) {
           return;
         }
-        service.fetch('iloire', $(this).data('repo'), {cache_duration_minutes: 60}, function (data) {
+        var key = $(this).data('repo');
+        service.fetch('iloire', key, {cache_duration_minutes: 60}, function (data) {
+
           var html;
-          try {
-            html = markdown.toHTML(window.atob(data.content));
+          var cacheMarkdown = cache.get(key);
+          if (cacheMarkdown) {
+            html = cacheMarkdown;
           }
-          catch (err) {
-            console.error('Error parsing markdown');
-            console.error(err);
-            return;
+          else {
+            try {
+              html = b64_to_utf8(data.content);
+              html = marked(html);
+              cache.set(key, html, 60 * 30); // 30 min
+            }
+            catch (err) {
+              html = 'unavailable';
+              console.error('Error parsing markdown from github');
+              console.error(err);
+            }
           }
           var container = $('<div/>').addClass('gh-preview');
           container.append('<span class="header">github\'s readme preview</span>');
