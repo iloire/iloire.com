@@ -8,6 +8,7 @@ var runSequence = require('run-sequence');
 var rev = require('gulp-rev');
 var revCollector = require('gulp-rev-collector');
 var path = require('path');
+
 var TEMP_DIR = './tmp';
 var BUILD_DIR = './build';
 
@@ -18,55 +19,8 @@ function js(shouldMinify) {
       .pipe(plugins.if(shouldMinify, plugins.uglify()))
       .pipe(rev())
       .pipe(gulp.dest(BUILD_DIR))
-      .pipe(rev.manifest('manifest.json', {merge: true}))
-      .pipe(gulp.dest(TEMP_DIR));
-}
-
-function css() {
-  return gulp.src(mainBowerFiles().concat(['./less/*.less']))
-      .pipe(plugins.filter(['*.css', '*.less']))
-      .pipe(plugins.less())
-      .pipe(plugins.concat('app.css'))
-      .pipe(rev())
-      .pipe(gulp.dest(BUILD_DIR))
-      .pipe(rev.manifest('manifest.json', {merge: true}))
-      .pipe(gulp.dest(TEMP_DIR));
-}
-
-function watch() {
-  gulp.watch('./images/*', ['images']);
-  gulp.watch('./js/**', ['lint','js-dev']);
-  gulp.watch('./less/*', ['css']);
-  gulp.watch('./bower_components/**', ['build']);
-  gulp.watch('./index.html', ['html']);
-}
-
-function html() {
-  return gulp.src([path.join(TEMP_DIR, '*.json'),'./index.html'])
-      .pipe(revCollector({
-        replaceReved: true
-      }))
-      .pipe(gulp.dest(BUILD_DIR));
-}
-
-function images() {
-  return gulp.src('./images/*')
-      .pipe(gulp.dest('./build/images/'), {prefix: 1});
-}
-
-function clean() {
-  return del([BUILD_DIR, TEMP_DIR]);
-}
-
-function cleanTmp() {
-  return del([TEMP_DIR]);
-}
-
-function lint() {
-  return gulp.src('./js/*.js')
-      .pipe(plugins.filter(['*','!marked.js']))
-      .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('default'))
+      .pipe(rev.manifest('./tmp/manifest.json', { merge: true}))
+      .pipe(gulp.dest(''));
 }
 
 gulp.task('js-dev', function () {
@@ -78,37 +32,56 @@ gulp.task('js-prod', function () {
 });
 
 gulp.task('css', function () {
-  return css();
+  return gulp.src(mainBowerFiles().concat(['./less/*.less']))
+      .pipe(plugins.filter(['*.css', '*.less']))
+      .pipe(plugins.less())
+      .pipe(plugins.concat('app.css'))
+      .pipe(rev())
+      .pipe(gulp.dest(BUILD_DIR))
+      .pipe(rev.manifest('./tmp/manifest.json', { merge: true}))
+      .pipe(gulp.dest(''));
 });
 
 gulp.task('lint', function () {
-  return lint();
+  return gulp.src('./js/*.js')
+      .pipe(plugins.filter(['*','!marked.js']))
+      .pipe(plugins.jshint())
+      .pipe(plugins.jshint.reporter('default'))
 });
 
 gulp.task('watch', function () {
-  return watch();
+  gulp.watch('./images/*', ['images']);
+  gulp.watch('./js/**', ['lint','js-dev']);
+  gulp.watch('./less/*', ['build']);
+  gulp.watch('./bower_components/**', ['build']);
+  gulp.watch('./index.html', ['build']);
 });
 
 gulp.task('default', ['watch']);
 
 gulp.task('clean', function () {
-  return clean();
+  return del([BUILD_DIR, TEMP_DIR]);
 });
 
 gulp.task('cleanTmp', function () {
-  return cleanTmp();
+  return del([TEMP_DIR]);
 });
 
 gulp.task('images', function () {
-  return images();
+  return gulp.src('./images/*')
+      .pipe(gulp.dest('./build/images/'), {prefix: 1});
 });
 
 gulp.task('html', function () {
-  return html();
+  return gulp.src([path.join(TEMP_DIR, '*.json'),'./index.html'])
+      .pipe(revCollector({
+        replaceReved: true
+      }))
+      .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('build', function (callback) {
-  runSequence('clean', ['images', 'css', 'js-prod'], 'html', 'cleanTmp', callback);
+  runSequence('clean', 'images', 'css', 'js-prod', 'html', 'cleanTmp', callback);
 });
 
 gulp.task('deploy', function () {
