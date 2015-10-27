@@ -5,13 +5,21 @@ var del = require('del');
 var awspublish = require('gulp-awspublish');
 var cloudfront = require("gulp-cloudfront");
 var runSequence = require('run-sequence');
+var rev = require('gulp-rev');
+var revCollector = require('gulp-rev-collector');
+var path = require('path');
+var TEMP_DIR = './tmp';
+var BUILD_DIR = './build';
 
 function js(shouldMinify) {
   return gulp.src(mainBowerFiles().concat(['./js/*.js']))
       .pipe(plugins.filter('*.js'))
       .pipe(plugins.concat('app.js'))
       .pipe(plugins.if(shouldMinify, plugins.uglify()))
-      .pipe(gulp.dest('./build'));
+      .pipe(rev())
+      .pipe(gulp.dest(BUILD_DIR))
+      .pipe(rev.manifest('manifest.json', {merge: true}))
+      .pipe(gulp.dest(TEMP_DIR));
 }
 
 function css() {
@@ -19,7 +27,10 @@ function css() {
       .pipe(plugins.filter(['*.css', '*.less']))
       .pipe(plugins.less())
       .pipe(plugins.concat('app.css'))
-      .pipe(gulp.dest('./build'));
+      .pipe(rev())
+      .pipe(gulp.dest(BUILD_DIR))
+      .pipe(rev.manifest('manifest.json', {merge: true}))
+      .pipe(gulp.dest(TEMP_DIR));
 }
 
 function watch() {
@@ -31,8 +42,11 @@ function watch() {
 }
 
 function html() {
-  return gulp.src('./index.html')
-      .pipe(gulp.dest('./build/'), {prefix: 1});
+  return gulp.src([path.join(TEMP_DIR, '*.json'),'./index.html'])
+      .pipe(revCollector({
+        replaceReved: true
+      }))
+      .pipe(gulp.dest(BUILD_DIR));
 }
 
 function images() {
@@ -41,7 +55,11 @@ function images() {
 }
 
 function clean() {
-  return del(['./build/**','./build']);
+  return del([BUILD_DIR, TEMP_DIR]);
+}
+
+function cleanTmp() {
+  return del([TEMP_DIR]);
 }
 
 function lint() {
@@ -77,6 +95,10 @@ gulp.task('clean', function () {
   return clean();
 });
 
+gulp.task('cleanTmp', function () {
+  return cleanTmp();
+});
+
 gulp.task('images', function () {
   return images();
 });
@@ -86,7 +108,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('build', function (callback) {
-  runSequence('clean', ['html', 'images', 'css', 'js-prod'], callback);
+  runSequence('clean', ['images', 'css', 'js-prod'], 'html', 'cleanTmp', callback);
 });
 
 gulp.task('deploy', function () {
