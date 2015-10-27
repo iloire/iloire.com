@@ -1,5 +1,10 @@
-define('content-hover', ['settings', 'image-preloader'], function (SETTINGS,
-                                                                   preloader) {
+define('content-hover', [
+  'settings',
+  'image-preloader'
+], function (
+    SETTINGS,
+    preloader
+) {
 
   var PRELOAD_IMAGES = [
     'europe.svg', 'dgallery1.png', 'shipit24.jpg', 'backbone-googlemaps.jpg', 'letsnode.jpg',

@@ -1,14 +1,14 @@
-define('localStorage-cache', function(){
+define('localStorage-cache', function () {
 
-  return  {
+  return {
 
-    get : function (key) {
-      if(typeof(Storage)!=="undefined"){
-        if (localStorage.getItem(key)){ //get from HTML5 localStorage
-          if (JSON.parse(localStorage.getItem(key)).expires < +new Date()){
+    get: function (key) {
+      if (typeof(Storage) !== "undefined") {
+        if (localStorage.getItem(key)) { //get from HTML5 localStorage
+          if (JSON.parse(localStorage.getItem(key)).expires < +new Date()) {
             localStorage.removeItem(key);
           }
-          else{
+          else {
             return JSON.parse(localStorage.getItem(key)).data;
           }
         }
@@ -16,9 +16,13 @@ define('localStorage-cache', function(){
       return null;
     },
 
-    set : function (key, obj, expiration_seconds){
-      if(typeof(Storage)!=="undefined"){
-        localStorage.setItem(key, JSON.stringify({data: obj, expires: +new Date() + expiration_seconds * 1000}));
+    set: function (key, obj, expiration_seconds) {
+      if (typeof(Storage) !== "undefined") {
+        try {
+          localStorage.setItem(key, JSON.stringify({data: obj, expires: +new Date() + expiration_seconds * 1000}));
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 
