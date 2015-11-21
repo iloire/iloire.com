@@ -82,7 +82,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('build', function (callback) {
-  runSequence('clean', 'images', 'css', 'js-prod', 'html', 'cleanTmp', callback);
+  runSequence('lint', 'clean', 'images', 'css', 'js-prod', 'html', 'cleanTmp', callback);
 });
 
 gulp.task('deploy', function () {
