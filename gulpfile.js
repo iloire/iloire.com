@@ -52,7 +52,7 @@ gulp.task('lint', function () {
 
 gulp.task('watch', function () {
   gulp.watch('./images/*', ['images']);
-  gulp.watch('./js/**', ['lint','js-dev']);
+  gulp.watch('./js/**', ['build']);
   gulp.watch('./less/*', ['build']);
   gulp.watch('./bower_components/**', ['build']);
   gulp.watch('./index.html', ['build']);
