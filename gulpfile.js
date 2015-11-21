@@ -100,7 +100,8 @@ gulp.task('deploy', function () {
     'Cache-Control': 'max-age=315360000, no-transform, public'
   };
 
-  var indexFile = gulp.src('public/index.html')
+  var indexFile = gulp.src('build/index.html')
+      .pipe(awspublish.gzip())
       .pipe(publisher.publish({}, {simulate: false}));
 
   var cacheable = gulp.src([ 'build/**/*', '!build/index.html' ])
