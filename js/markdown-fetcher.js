@@ -14,6 +14,8 @@ function (
   analytics
 ) {
 
+  var MIN_WIDTH = 1200; // px
+
   function isSupported() {
     return !!window.atob;
   }
@@ -38,10 +40,25 @@ function (
         contentHover.showExtraContent(container);
       }
 
+      function setHelpVisibility (){
+        if (window.innerWidth < MIN_WIDTH) {
+          $('.gh-details-help').fadeOut();
+        } else {
+          $('.gh-details-help').fadeIn();
+        }
+      }
+
+      window.addEventListener("resize", function(e){
+        setHelpVisibility()
+      });
+
+      setHelpVisibility();
+
       $('a.gh-project').mouseover(function () {
-        if (window.innerWidth < 1200) {
+        if (window.innerWidth < MIN_WIDTH) {
           return;
         }
+
         var html;
         var repo = $(this).data('repo');
         markdownService.fetch('iloire', repo, {cache_duration_minutes: 60}, function (data) {
