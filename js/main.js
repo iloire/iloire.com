@@ -41,9 +41,7 @@ require([
     }
 
     var init = function () {
-      if (backgroundEffect.canvasSupported()) {
-        backgroundEffect.init();
-      }
+      backgroundEffect.init();
       contentHover.init();
       var where = document.getElementById('ghcontainer');
       where.innerHTML = 'loading...';
