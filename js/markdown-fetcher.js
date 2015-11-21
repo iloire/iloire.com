@@ -2,14 +2,16 @@ define('markdown-fetcher', [
   'jquery',
   'service-markdown-fetcher',
   'content-hover',
-  'marked'
+  'marked',
+  'analytics'
 ],
 
 function (
   $,
   markdownService,
   contentHover,
-  marked
+  marked,
+  analytics
 ) {
 
   function isSupported() {
@@ -41,12 +43,15 @@ function (
           return;
         }
         var html;
-        markdownService.fetch('iloire', $(this).data('repo'), {cache_duration_minutes: 60}, function (data) {
+        var repo = $(this).data('repo');
+        markdownService.fetch('iloire', repo, {cache_duration_minutes: 60}, function (data) {
           try {
+            analytics.track('mouse-over', 'gh-project', repo);
             html = marked(b64_to_utf8(data.content));
             render(html);
           }
           catch (err) {
+            analytics.track('error', 'gh-project-markdown', repo);
             render('unavailable');
             console.error('Error parsing markdown from github');
             console.error(err);

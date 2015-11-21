@@ -1,9 +1,11 @@
 define('content-hover', [
   'settings',
-  'image-preloader'
+  'image-preloader',
+  'analytics'
 ], function (
     SETTINGS,
-    preloader
+    preloader,
+    analytics
 ) {
 
   var PRELOAD_IMAGES = [
@@ -79,6 +81,7 @@ define('content-hover', [
         clearTimeout(timeoutFade);
         if (shouldEnableExtraContent()) {
           var id = $(this).attr('data-contentid');
+          analytics.track('mouse-over', 'extra-content', id);
           showExtraContent(CONTENT[id]);
         }
       }).mouseout(function () {
