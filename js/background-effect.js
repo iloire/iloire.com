@@ -1,12 +1,14 @@
 define('background-effect', function(){
 
-  var SWARM_COLORS = ['#fff9e6','#FBFBFB', '#FAFAFA', '#F7F7F7', "F8F8F8", "#f5f5f5", "F9F9F9"];
+  var SWARM_COLORS = ['#fff9e6','#FBFBFB', '#FFFFFF', '#FAFAFA', '#F7F7F7', "F8F8F8", "#f5f5f5", "F9F9F9"];
   var BG_COLORS = SWARM_COLORS;
+  var IMG_BG_COLORS = BG_COLORS.concat(['#f5f5f5', '#f5f5f5']);
 
   var SEPARATOR_SIZE = 1;
-  var SQUARE_SIZE = 6;
-  var SWARM_PADDING = 200;
+  var SQUARE_SIZE = 7;
+  var SWARM_PADDING = 300;
   var ITERATIONS_PER_TICK = 50;
+  var INTERVAL = 100;
 
   var cursorX = 0;
   var cursorY = 0;
@@ -39,22 +41,59 @@ define('background-effect', function(){
     }
   }
 
+  function paintSquareInCoordinates(x, y, colors) {
+    var colX = parseInt(x / (SQUARE_SIZE + SEPARATOR_SIZE));
+    var colY = parseInt(y / (SQUARE_SIZE + SEPARATOR_SIZE));
+
+    paintSquareInRowColumn(colX, colY, colors);
+    return {colX: colX, colY: colY};
+  }
+
   function tick(){
     for (var i = 0; i < ITERATIONS_PER_TICK; i++) {
-      var angle = Math.random()*Math.PI*2;
-      var radius = getRandomInt(0, SWARM_PADDING);
-      var x = cursorX + Math.cos(angle)*radius;
-      var y = cursorY - window.pageYOffset + Math.sin(angle)*radius;
+      paintRandomPointAround(cursorX, cursorY, SWARM_PADDING, SWARM_COLORS);
+    }
 
-      // from pixels back to columns and rows
-      var colX = parseInt(x / (SQUARE_SIZE + SEPARATOR_SIZE));
-      var colY = parseInt(y / (SQUARE_SIZE + SEPARATOR_SIZE));
+    var $img = $('#extrainfo img');
+    if ($img.length) {
+      var position = $img.offset();
+      var width = $img.width();
+      var height = $img.height();
+      var margin = 40;
 
-      paintSquareIn(colX, colY, SWARM_COLORS);
+      for (var i = 0; i < ITERATIONS_PER_TICK; i++) {
+
+        // left
+        paintRandomPointBetween(position.left - margin, position.left, position.top + height + margin, position.top - margin, IMG_BG_COLORS);
+
+        // right
+        paintRandomPointBetween(position.left + width, position.left + width + margin, position.top + height + margin, position.top - margin, IMG_BG_COLORS);
+
+        // top
+        paintRandomPointBetween(position.left - margin, position.left + width + margin, position.top, position.top - margin, IMG_BG_COLORS);
+
+        // bottom
+        paintRandomPointBetween(position.left - margin, position.left + width + margin, position.top + height + margin, position.top + height, IMG_BG_COLORS);
+
+      }
     }
   }
 
-  function paintSquareIn(colX, colY, colors) {
+  function paintRandomPointBetween(minX, maxX, minY, maxY, colors){
+    var x = getRandomInt(minX, maxX);
+    var y = getRandomInt(minY, maxY);
+    paintSquareInCoordinates(x, y, colors); //
+  }
+
+  function paintRandomPointAround(x, y, padding, colors){
+    var angle = Math.random() * Math.PI * 2;
+    var radius = getRandomInt(0, padding);
+    var targetX = x + Math.cos(angle) * radius;
+    var targetY = y - window.pageYOffset + Math.sin(angle) * radius;
+    paintSquareInCoordinates(targetX, targetY, colors); //
+  }
+
+  function paintSquareInRowColumn(colX, colY, colors) {
     var x = colX * (SQUARE_SIZE + SEPARATOR_SIZE);
     var y = colY * (SQUARE_SIZE + SEPARATOR_SIZE);
     createSquare(x, y, SQUARE_SIZE, SQUARE_SIZE, getRandomColor(colors || BG_COLORS));
@@ -84,6 +123,11 @@ define('background-effect', function(){
 
     init: function(){
 
+      if (!this.canvasSupported()) {
+        console.log('canvas not supported');
+        return;
+      }
+
       document.addEventListener('mousemove', function(e){
         cursorX = e.pageX;
         cursorY = e.pageY;
@@ -91,13 +135,14 @@ define('background-effect', function(){
 
       window.addEventListener("resize", function(e){
         resizeCanvas(canvas);
+        paintBg(canvas.width, canvas.height);
       });
 
       resizeCanvas(canvas);
 
       paintBg(canvas.width, canvas.height);
 
-      setInterval(tick, 20);
+      setInterval(tick, INTERVAL);
     }
   };
 
