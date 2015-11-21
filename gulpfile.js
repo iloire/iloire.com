@@ -8,6 +8,7 @@ var runSequence = require('run-sequence');
 var rev = require('gulp-rev');
 var revCollector = require('gulp-rev-collector');
 var path = require('path');
+var merge = require('merge-stream');
 
 var TEMP_DIR = './tmp';
 var BUILD_DIR = './build';
@@ -98,9 +99,15 @@ gulp.task('deploy', function () {
   var headers = {
     'Cache-Control': 'max-age=315360000, no-transform, public'
   };
-  return gulp.src('build/**')
+
+  var indexFile = gulp.src('public/index.html')
+      .pipe(publisher.publish({}, {simulate: false}));
+
+  var cacheable = gulp.src([ 'build/**/*', '!build/index.html' ])
       .pipe(awspublish.gzip())
-      .pipe(publisher.publish(headers, {simulate: false}))
+      .pipe(publisher.publish(headers, {simulate: false}));
+
+  merge(indexFile, cacheable)
       .pipe(publisher.cache())
       .pipe(awspublish.reporter())
       .pipe(cloudfront(aws));
