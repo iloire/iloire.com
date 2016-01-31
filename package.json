@@ -4,7 +4,11 @@
   "description": "my personal website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp build",
+    "lint": "gulp lint",
+    "watch": "mkdir -p ./tmp; gulp watch",
+    "deploy": "gulp deploy"
   },
   "repository": {
     "type": "git",

@@ -4,11 +4,19 @@ hey, my personal web site actually!
 
 * [http://iloire.com/](http://iloire.com/)
 
-# gulp tasks
+# npm run scripts
+
+first run
 
 ```
-$ gulp watch
-$ gulp lint
-$ gulp build
-$ gulp deploy
+$ npm install
+```
+
+then:
+
+```
+$ npm run watch
+$ npm run lint
+$ npm run build
+$ npm run deploy
 ```
