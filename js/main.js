@@ -47,9 +47,8 @@ require([
       where.innerHTML = 'loading...';
       gh.getGitHubProjects('iloire', {cache_duration_minutes: 30}, function (data) {
         where.innerHTML = massageGhData(data);
-        markdownFetcher.init();
+        markdownFetcher.init({prefetch: true});
       });
     };
     init();
   });
-

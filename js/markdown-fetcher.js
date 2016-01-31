@@ -26,7 +26,9 @@ function (
 
   return {
 
-    init: function () {
+    init: function (options) {
+
+      var options = options || {};
 
       if (!isSupported()) {
         return;
@@ -48,6 +50,28 @@ function (
         }
       }
 
+      function fetch(username, repo, options) {
+        markdownService.fetch(username, repo, options, function (data) {
+          try {
+            analytics.track('mouse-over', 'gh-project', repo);
+            render(marked(b64_to_utf8(data.content)));
+          }
+          catch (err) {
+            analytics.track('error', 'gh-project-markdown', repo);
+            render('unavailable');
+            console.error('Error parsing markdown from github', err);
+          }
+        });
+      }
+
+      function prefetch(delay) {
+        setTimeout(function(){
+          $('a.gh-project').each(function(index, link) {
+              fetch('iloire', $(link).data('repo'), {cache_duration_minutes: 60});
+          });
+        }, delay);
+      }
+
       window.addEventListener("resize", function(e){
         setHelpVisibility()
       });
@@ -59,22 +83,12 @@ function (
           return;
         }
 
-        var html;
-        var repo = $(this).data('repo');
-        markdownService.fetch('iloire', repo, {cache_duration_minutes: 60}, function (data) {
-          try {
-            analytics.track('mouse-over', 'gh-project', repo);
-            html = marked(b64_to_utf8(data.content));
-            render(html);
-          }
-          catch (err) {
-            analytics.track('error', 'gh-project-markdown', repo);
-            render('unavailable');
-            console.error('Error parsing markdown from github');
-            console.error(err);
-          }
-        });
+        fetch('iloire', $(this).data('repo'), {cache_duration_minutes: 60});
       });
+
+      if (options.prefetch) {
+        prefetch(2000);
+      }
     }
   };
 });
