@@ -1,8 +1,9 @@
 # a personal web site
 
-hey, my personal web site actually!
+> **Archived.** This is the 2016 version of iloire.com, served from S3 until November 2026.
+> iloire.com is now built from [iloire/voxel-office](https://github.com/iloire/voxel-office).
 
-* [http://iloire.com/](http://iloire.com/)
+hey, my personal web site actually!
 
 # npm run scripts
 
